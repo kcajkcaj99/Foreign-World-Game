@@ -271,8 +271,8 @@ while PoisonBerryName == "" or PoisonBerryName == BasicFruitName:
 
 FlaxName = "A "+randchoice(list(["small", "large", "wide", "tall", "clustered"]))+" "+randchoice(list(["red", "white", "pink", "purple", "blue", "orange", "yellow", "black"]))+" flower with a "+randchoice(list(["tall", "short", "rough"]))+" stem"
 FlaxFibreColor = randchoice(list(["brown", "white", "black", "grey", "tan"]))
-FlaxTwineName = "Some "+FlaxFibreColor+" twine."
-FlaxFabricName = "A fibrous "+FlaxFibreColor+" fabric."
+FlaxTwineName = "Some "+FlaxFibreColor+" twine"
+FlaxFabricName = "A fibrous "+FlaxFibreColor+" fabric"
 FlaxClothesName = "Clothes made from "+str.lower(FlaxFabricName)
 FlaxSeedName = "A "+randchoice(list(["hard", "round", "sharp", "soft"]))+" "+randchoice(list(["golden", "brown", "tan", "black"]))+" seed"
 FlaxFibreName = "A "+FlaxFibreColor+" fibre"
@@ -284,15 +284,21 @@ BasicFabricName = "A "+randchoice(list(["soft", "rough", "fleecy"]))+" "+randcho
 # The following code sets items made of various materials names
 BasicClothesName = "Clothes made from " + str.lower(BasicFabricName)
 
+# The following code sets wood names.
+BasicWoodName = "A "+randchoice(list(["dark", "light", "red", "pale"]))+" wood"
+BasicTwigName = "A twig made of "+str.lower(BasicWoodName)
+BasicBranchName = "A branch made of "+str.lower(BasicWoodName)
+
 # The following code sets your characters abilities
 health = 12
 inventory = list ([BasicFruitName, BasicFruitName, BasicFruitName, SecondaryFruitName, BasicClothesName])
 armor = 0
 mana = 10
 magic = 0
-hunger = 55
+hunger = 75
 ClothesName = BasicClothesName
 sleeptime = 0
+fire = 0
 
 # The following code forms your stats from its parts
 stats = list([health, inventory, armor, mana])
@@ -342,6 +348,7 @@ while True:
     print ("    p: Process raw materials")
     print ("    r: Rest")
     print ("    c: Craft")
+    print ("    b: Build")
     action = str.lower(input (""))
     print()
     # This code executes eating
@@ -407,29 +414,42 @@ while True:
         print ("What do you want to wear?")
         if BasicClothesName in inventory:
             print ("    1: "+BasicClothesName)
+        if FlaxClothesName in inventory:
+            print ("    2: "+FlaxClothesName)
         action = input("")
         if action == "1" and BasicClothesName in inventory:
             print ("You put on "+str.lower(BasicClothesName)+".")
             ClothesName = BasicClothesName
+        elif action == "2" and FlaxClothesName in inventory:
+            print ("You put on "+str.lower(FlaxClothesName)+".")
+            ClothesName = FlaxClothesName
     #This code executes searching
     elif action == "s":
         # This code asks what you want to search for.
         print ("What do you want to search for?")
         print ("    b: Berries")
         print ("    f: Flowers")
+        print ("    t: Twigs and Branches")
         action = input ("")
         print ("You have spent some time searching.")
         if str.lower(action) == "b":
-            count = random.randint(2, 6)
+            count = random.randint(3, 7)
             while count > 0:
                 find = randchoice(list([BasicBerryName, BasicBerryName, PoisonBerryName]))
                 inventory += [find]
                 print ("You have found "+str.lower(find)+"!")
                 count -= 1
-        if str.lower(action) == "f":
+        elif str.lower(action) == "f":
             count = random.randint(1, 4)
             while count > 0:
                 find = randchoice(list([FlaxName, FlaxName, FlaxName]))
+                inventory += [find]
+                print ("You have found "+str.lower(find)+"!")
+                count -= 1
+        elif str.lower(action) == "t":
+            count = random.randint(1, 3)
+            while count > 0:
+                find = randchoice(list([BasicTwigName, BasicTwigName, BasicTwigName, BasicTwigName, BasicTwigName, BasicBranchName, BasicBranchName]))
                 inventory += [find]
                 print ("You have found "+str.lower(find)+"!")
                 count -= 1
@@ -467,6 +487,8 @@ while True:
             print ("    1: Spin twine out of "+str.lower(FlaxFibreName)+".")
         if inventory.count(FlaxTwineName) >= 4:
             print ("    2: Weave fabric out of "+str.lower(FlaxTwineName)+".")
+        if inventory.count(FlaxFabricName) >= 7:
+            print ("    3: Weave fabric out of "+str.lower(FlaxClothesName)+".")
         action = input("")
         # This code makes flaxen twine
         if action == "1" and FlaxFibreName in inventory:
@@ -474,14 +496,46 @@ while True:
             inventory += [FlaxTwineName]
             print ("You spin "+FlaxTwineName+".")
             sleeptime += 0.1
-        # This code makes flaxen fabric/
+        # This code makes flaxen fabric
         elif action == "2" and inventory.count(FlaxTwineName) > 3:
             inventory.remove(FlaxTwineName)
             inventory.remove(FlaxTwineName)
             inventory.remove(FlaxTwineName)
             inventory.remove(FlaxTwineName)
             inventory += [FlaxFabricName]
-            print ("You weave "+FlaxFabricName+".")
+            print ("You weave "+str.lower(FlaxFabricName)+".")
             sleeptime += 0.5
             hunger -= 2
+        # This code makes flaxen clothes
+        elif action == "3" and inventory.count(FlaxFabricName) > 7:
+            recurrence = 8
+            while recurrence > 0:
+                inventory.remove(FlaxFabricName)
+                recurrence -= 1
+            inventory += [FlaxClothesName]
+            print ("You make "+str.lower(FlaxClothesName)+".")
+            sleeptime += 0.75
+            hunger -= 3
+    # This code executes building
+    elif action == "b":
+        # This code asks you what you want to build
+        print ("What do you want to build?")
+        if (inventory.count(BasicTwigName)) > 4 and (inventory.count(BasicBranchName)) > 2:
+            print ("    1: A basic campfire")
+        action = input()
+        # This code builds a campfire
+        if action == "1" and (inventory.count(BasicTwigName)) > 4 and (inventory.count(BasicBranchName)) > 2:
+            # This code consumes branches twigs.
+            count = 5
+            while count > 0:
+                if BasicTwigName in inventory:
+                    inventory.remove(BasicTwigName)
+                count -= 1
+            # This code consumes branches
+            count = 3
+            while count > 0:
+                if BasicBranchName in inventory:
+                    inventory.remove(BasicBranchName)
+                count -= 1
+            fire = 1
     print()
