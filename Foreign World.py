@@ -429,7 +429,11 @@ while True:
     #This code executes searching your inventory
     elif action == "i":
         print ("You are wearing "+str.lower(ClothesName)+".")
-        print (inventory)
+        count = 0
+        for item in inventory:
+            count += 1
+            print(str(count) + ". " + item)
+
     #This code executes changing clothing
     elif action == "g":
         # This code asks you want you want to wear
