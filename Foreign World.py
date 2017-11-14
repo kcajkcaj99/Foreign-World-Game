@@ -112,22 +112,26 @@ def combat(cstats, cdamagemin, cdamagemax, cweapon, etype, elocation, cmagic):
         # This code asks you what you want to do.
         print ("What do you do?")
         print ("    1: Nothing.")
-        print ("    2: Use an item.")
-        print ("    3: Run away.")
-        print ("    4: Attack.")
+        print ("    2: Run away.")
+        print ("    3: Attack.")
         if cmagic == 1:
             print ("    5: Cast a spell.")
         caction = input ("")
 
+        '''
         # This code runs if you want to use an item.
         if caction == "2":
             # This code asks you what items you want to use.
-            print ("You have the following items in your inventory: "+str(cinventory))
+            print ("You have the following items in your inventory:")
+            count = 0
+            for item in inventory:
+                count += 1
+
             print ("Name the item you want to use.")
             citem = input ("")
-
+        '''
         # This code runs if you try to run
-        elif caction == "3":
+        if caction == "2":
             if eai == "Aggressive":
                 print("You run, but the "+str.lower(etype)+" chases you.")
             elif eai == "Defensive":
@@ -135,7 +139,7 @@ def combat(cstats, cdamagemin, cdamagemax, cweapon, etype, elocation, cmagic):
                 break
 
         # This code runs if you attack.
-        elif caction == "4":
+        elif caction == "3":
             print ("You attack with your "+str.lower(cweapon))
             damage = random.randint(cdamagemin, cdamagemax)
             ehit = 1
@@ -147,7 +151,7 @@ def combat(cstats, cdamagemin, cdamagemax, cweapon, etype, elocation, cmagic):
                 earmor -= 1
 
         # This code runs if you try to cast a spell.
-        elif caction == "5" and cmagic == 1:
+        elif caction == "4" and cmagic == 1:
             print ("Enter your magic phrase.")
             cspell = formstring(removepunc(list(str.lower(input ("")))))
             # This handles the various spells in the game
@@ -241,343 +245,414 @@ def randchoice(listy):
     numy = random.randint(1, len(listy)) - 1
     return listy[numy]
 
-# The following code sets fruit names.
+while True: #everything is in a giant while loop so that the game can be reset afterward.
+    # The following code sets fruit names.
 
-BasicFruitName = "A "+randchoice(list(["spherical", "tubular", "bulbous"]))+" "+randchoice(list(["red", "green", "yellow"]))+" fruit"
-SecondaryFruitName = ""
-while SecondaryFruitName == "" or SecondaryFruitName == BasicFruitName:
-    SecondaryFruitName = "A "+randchoice(list(["spherical", "tubular", "bulbous"]))+" "+randchoice(list(["red", "green", "yellow"]))+" fruit"
-TertiaryFruitName = ""
-while TertiaryFruitName == "" or TertiaryFruitName == BasicFruitName or TertiaryFruitName == SecondaryFruitName:
-    TertiaryFruitName = "A "+randchoice(list(["spherical", "tubular", "bulbous"]))+" "+randchoice(list(["red", "green", "yellow"]))+" fruit"
+    BasicFruitName = "A "+randchoice(list(["spherical", "tubular", "bulbous"]))+" "+randchoice(list(["red", "green", "yellow"]))+" fruit"
+    SecondaryFruitName = ""
+    while SecondaryFruitName == "" or SecondaryFruitName == BasicFruitName:
+        SecondaryFruitName = "A "+randchoice(list(["spherical", "tubular", "bulbous"]))+" "+randchoice(list(["red", "green", "yellow"]))+" fruit"
+    TertiaryFruitName = ""
+    while TertiaryFruitName == "" or TertiaryFruitName == BasicFruitName or TertiaryFruitName == SecondaryFruitName:
+        TertiaryFruitName = "A "+randchoice(list(["spherical", "tubular", "bulbous"]))+" "+randchoice(list(["red", "green", "yellow"]))+" fruit"
 
-# The following code sets berry names.
-BasicBerryName = "A "+randchoice(list(["red", "green", "blue", "black", "white", "pink", "purple", "magenta"]))+" berry"
-PoisonBerryName = ""
-while PoisonBerryName == "" or PoisonBerryName == BasicFruitName:
-    PoisonBerryName = "A "+randchoice(list(["red", "green", "blue", "black", "white", "purple", "pink", "magenta"]))+" berry"
+    # The following code sets berry names.
+    BasicBerryName = "A "+randchoice(list(["red", "green", "blue", "black", "white", "pink", "purple", "magenta"]))+" berry"
+    BasicBerryName = "A "+randchoice(list(["red", "green", "blue", "black", "white", "pink", "purple", "magenta"]))+" berry"
+    PoisonBerryName = ""
+    while PoisonBerryName == "" or PoisonBerryName == BasicFruitName:
+        PoisonBerryName = "A "+randchoice(list(["red", "green", "blue", "black", "white", "purple", "pink", "magenta"]))+" berry"
 
-# The following code sets flax and flax fabric names.
+    # The following code sets flax and flax fabric names.
 
-FlaxName = "A "+randchoice(list(["small", "large", "wide", "tall", "clustered"]))+" "+randchoice(list(["red", "white", "pink", "purple", "blue", "orange", "yellow", "black"]))+" flower with a "+randchoice(list(["tall", "short", "rough"]))+" stem"
-FlaxFibreColor = randchoice(list(["brown", "white", "black", "grey", "tan"]))
-FlaxTwineName = "Some "+FlaxFibreColor+" twine"
-FlaxFabricName = "A fibrous "+FlaxFibreColor+" fabric"
-FlaxClothesName = "Clothes made from "+str.lower(FlaxFabricName)
-FlaxSeedName = "A "+randchoice(list(["hard", "round", "sharp", "soft"]))+" "+randchoice(list(["golden", "brown", "tan", "black"]))+" seed"
-FlaxFibreName = "A "+FlaxFibreColor+" fibre"
+    FlaxName = "A "+randchoice(list(["small", "large", "wide", "tall", "clustered"]))+" "+randchoice(list(["red", "white", "pink", "purple", "blue", "orange", "yellow", "black"]))+" flower with a "+randchoice(list(["tall", "short", "rough"]))+" stem"
+    FlaxFibreColor = randchoice(list(["brown", "white", "black", "grey", "tan"]))
+    FlaxTwineName = "Some "+FlaxFibreColor+" twine"
+    FlaxFabricName = "A fibrous "+FlaxFibreColor+" fabric"
+    FlaxClothesName = "Clothes made from "+str.lower(FlaxFabricName)
+    FlaxSeedName = "A "+randchoice(list(["hard", "round", "sharp", "soft"]))+" "+randchoice(list(["golden", "brown", "tan", "black"]))+" seed"
+    FlaxFibreName = "A "+FlaxFibreColor+" fibre"
 
-# The following code sets fabric names.
+    # The following code sets fabric names.
 
-BasicFabricName = "A "+randchoice(list(["soft", "rough", "fleecy"]))+" "+randchoice(list(["red", "white", "brown", "black", "grey", "tan"]))+" fabric"
+    BasicFabricName = "A "+randchoice(list(["soft", "rough", "fleecy"]))+" "+randchoice(list(["red", "white", "brown", "black", "grey", "tan"]))+" fabric"
 
-# The following code sets items made of various materials names
-BasicClothesName = "Clothes made from " + str.lower(BasicFabricName)
+    # The following code sets items made of various materials names
+    BasicClothesName = "Clothes made from " + str.lower(BasicFabricName)
 
-# The following code sets wood names.
-BasicWoodName = "A "+randchoice(list(["dark", "light", "red", "pale"]))+" wood"
-BasicTwigName = "A twig made of "+str.lower(BasicWoodName)
-BasicBranchName = "A branch made of "+str.lower(BasicWoodName)
+    # The following code sets wood names.
+    BasicWoodName = "A "+randchoice(list(["dark", "light", "red", "pale"]))+" wood"
+    BasicTwigName = "A twig made of "+str.lower(BasicWoodName)
+    BasicBranchName = "A branch made of "+str.lower(BasicWoodName)
 
-# The following code sets your characters abilities
-health = 12
-inventory = list ([BasicFruitName, BasicFruitName, BasicFruitName, SecondaryFruitName, BasicClothesName])
-armor = 0
-mana = 10
-magic = 0
-hunger = 75
-ClothesName = BasicClothesName
-sleeptime = 0
-fire = 0
-furnace = 0
-time = 0
-inittime = 0
-weapon = "Fists"
-damagemin = 1
-damagemax = 4
-event = 0
+    # The following code sets your characters abilities
+    health = 12
+    inventory = list ([BasicFruitName, BasicFruitName, BasicFruitName, SecondaryFruitName, BasicClothesName])
+    armor = 0
+    mana = 10
+    magic = 0
+    hunger = 75
+    ClothesName = BasicClothesName
+    sleeptime = 0
+    warm = 0
+    furnace = 0
+    time = 0
+    inittime = 0
+    weapon = "Fists"
+    damagemin = 1
+    damagemax = 4
+    event = 0
 
-# The following code forms your stats from its parts
-stats = list([health, inventory, armor, mana])
+    # The following code forms your stats from its parts
+    stats = list([health, inventory, armor, mana])
 
-# The following code begins the game
+    # The following code begins the game
 
-print ("Foreign World")
+    print ("Foreign World")
 
-print ()
-print ()
-print ()
-print ()
-print ()
-print ()
-print ()
+    print ()
+    print ()
+    print ()
+    print ()
+    print ()
+    print ()
+    print ()
 
-# This code runs the game
-while True:
-    timediff = time-inittime
-    if health < 1:
-        break
-    # This code asks what you want to do
-    if hunger < 1:
-        print ("You are starving.")
-        health -= timediff
-    elif hunger < 10:
-        print ("You are very hungry.")
-    elif hunger < 25:
-        print ("You are significantly hungry.")
-    elif hunger < 50:
-        print ("You are hungry.")
-    elif hunger < 75:
-        print ("You are slightly hungry.")
-    if sleeptime > 11:
-        print ("You are overtired.")
-        health -= timediff
-    elif sleeptime > 3:
-        print ("You are tired.")
-    elif sleeptime > 2:
-        print ("You are a little tired.")
-    if health < 3:
-        print ("You are near death.")
-    elif health < 6:
-        print ("You are severely injured.")
-    elif health < 12:
-        print ("You are injured.")
-    if fire == 0:
-        randchance = random.randint(1, 3)
-        if randchance == 1:
-            print ("You are freezing.")
-            health -= timediff
-        else:
-            print ("You are cold.")
-    if time > 4 and event == 0:
-        print()
-        stats = list([health, inventory, armor, mana])
-        stats = combat(stats, damagemin, damagemax, weapon, "Wolf", "Field", magic)
-        health = stats[0]
-        inventory = stats[1]
-        armor = stats[2]
-        mana = stats[3]
+    # This code runs the game
+    while True:
+        timediff = time-inittime
         if health < 1:
             break
-        event = 1
-    inittime = time
-    print ("What do you want to do?")
-    print ("    i: Inspect your Inventory")
-    print ("    e: Eat something.")
-    print ("    g: Change garments")
-    print ("    s: Search for things")
-    print ("    p: Process raw materials")
-    print ("    r: Rest")
-    print ("    c: Craft")
-    print ("    b: Build")
-    print ("    w: Change weapons")
-    action = str.lower(input (""))
-    print()
-    # This code executes eating
-    if action == "e":
-        # This code asks what you want to eat
-        print ("What do you want to eat?")
-        if BasicFruitName in inventory:
-            print ("    1: "+BasicFruitName)
-        if SecondaryFruitName in inventory:
-            print ("    2: "+SecondaryFruitName)
-        if TertiaryFruitName in inventory:
-            print ("    3: "+TertiaryFruitName)
-        if PoisonBerryName in inventory:
-            print ("    4: "+PoisonBerryName)
-        if BasicBerryName in inventory:
-            print ("    5: "+BasicBerryName)
-        if FlaxSeedName in inventory:
-            print ("    6: "+FlaxSeedName)
-        action = input("")
+        # This code asks what you want to do
+        print("So far, you have survived for " + str(4*time) + " hours.")
+        print("Your health: " + str(health))
+        if warm == 0:
+            randchance = random.randint(1, 3)
+            if randchance == 1:
+                print ("You are freezing.")
+                health -= timediff
+            else:
+                print ("You are cold.")
+        if time > 4 and event == 0:
+            print()
+            stats = list([health, inventory, armor, mana])
+            stats = combat(stats, damagemin, damagemax, weapon, "Wolf", "Field", magic)
+            health = stats[0]
+            inventory = stats[1]
+            armor = stats[2]
+            mana = stats[3]
+            if health < 1:
+                break
+            event = 1
+        inittime = time
+        print ("What do you want to do?")
+        print ("    i: Inspect your Inventory")
+        print ("    e: Eat something.")
+        print ("    g: Change garments")
+        print ("    s: Search for things")
+        print ("    p: Process raw materials")
+        print ("    r: Rest")
+        print ("    c: Craft")
+        print ("    b: Build")
+        print ("    w: Change weapons")
+        print ("    h: Help")
+        action = str.lower(input (""))
         print()
-        # This code runs the results of what you eat.
-        if action == "1" and BasicFruitName in inventory:
-            print ("You eat "+str.lower(BasicFruitName))
-            inventory.remove(BasicFruitName)
-            hunger += 15
-            if hunger > 100:
-                hunger = 100
-        if action == "2" and SecondaryFruitName in inventory:
-            print ("You eat "+str.lower(SecondaryFruitName))
-            inventory.remove(SecondaryFruitName)
-            hunger += 20
-            if hunger > 100:
-                hunger = 100
-        if action == "3" and TertiaryFruitName in inventory:
-            print ("You eat "+str.lower(TertiaryFruitName))
-            inventory.remove(TertiaryFruitName)
-            hunger += 20
-            if hunger > 100:
-                hunger = 100
-        if action == "4" and PoisonBerryName in inventory:
-            print ("You eat "+str.lower(PoisonBerryName)+". It is poisonous.")
-            inventory.remove(PoisonBerryName)
-            health -= random.randint(1, 3)
-        if action == "5" and BasicBerryName in inventory:
-            print ("You eat "+str.lower(BasicBerryName))
-            inventory.remove(BasicBerryName)
-            hunger += 5
-            if hunger > 100:
-                hunger = 100
-        if action == "6" and FlaxSeedName in inventory:
-            print ("You eat "+str.lower(FlaxSeedName))
-            inventory.remove(FlaxSeedName)
-            hunger += 2
-            if hunger > 100:
-                hunger = 100
-    #This code executes searching your inventory
-    elif action == "i":
-        print ("You are wearing "+str.lower(ClothesName)+".")
-        count = 0
-        for item in inventory:
-            count += 1
-            print(str(count) + ". " + item)
+        # This code executes eating
+        if action == "e":
+            foodnames = [BasicFruitName, SecondaryFruitName, TertiaryFruitName, PoisonBerryName, BasicBerryName, FlaxSeedName]
+            # This code asks what you want to eat
+            print ("What do you want to eat?")
+            if BasicFruitName in inventory:
+                print ("    1: "+BasicFruitName)
+            if SecondaryFruitName in inventory:
+                print ("    2: "+SecondaryFruitName)
+            if TertiaryFruitName in inventory:
+                print ("    3: "+TertiaryFruitName)
+            if PoisonBerryName in inventory:
+                print ("    4: "+PoisonBerryName)
+            if BasicBerryName in inventory:
+                print ("    5: "+BasicBerryName)
+            if FlaxSeedName in inventory:
+                print ("    6: "+FlaxSeedName)
+            if "Raw wolf meat" in inventory:
+                print ("    7: Raw wolf meat")
+            if "Burnt wolf meat" in inventory:
+                print ("    8: Burnt wolf meat")
+            action = input("")
+            print()
+            # This code runs the results of what you eat.
+            if action == "1" and BasicFruitName in inventory:
+                print ("You eat "+str.lower(BasicFruitName))
+                inventory.remove(BasicFruitName)
+                hunger += 15
+                health += 2
+            if action == "2" and SecondaryFruitName in inventory:
+                print ("You eat "+str.lower(SecondaryFruitName))
+                inventory.remove(SecondaryFruitName)
+                hunger += 20
+                health += 2
+            if action == "3" and TertiaryFruitName in inventory:
+                print ("You eat "+str.lower(TertiaryFruitName))
+                inventory.remove(TertiaryFruitName)
+                hunger += 20
+                health += 2
+            if action == "4" and PoisonBerryName in inventory:
+                print ("You eat "+str.lower(PoisonBerryName)+". It makes you feel sick.")
+                inventory.remove(PoisonBerryName)
+                health -= random.randint(1, 3)
+            if action == "5" and BasicBerryName in inventory:
+                print ("You eat "+str.lower(BasicBerryName))
+                inventory.remove(BasicBerryName)
+                hunger += 5
+                health += 1
+            if action == "6" and FlaxSeedName in inventory:
+                print ("You eat "+str.lower(FlaxSeedName))
+                inventory.remove(FlaxSeedName)
+                hunger += 2
+                health += 1
+            if action == "7" and "Raw wolf meat" in inventory:
+                inventory.remove("Raw wolf meat")
+                if random.randint(0, 1) == 0: #Sometimes it should make you sick, sometimes it shouldn't.
+                    print("You eat the raw wolf meat.")
+                    hunger += 15
+                    health += 1
+                else:
+                    print("You eat the raw wolf meat. It makes you feel sick.")
+                    health -= random.randint(2, 4)
+            if action == "8" and "Burnt wolf meat" in inventory:
+                print ("You eat the burnt wolf meat. It tastes disgusting.")
+                inventory.remove("Burnt wolf meat")
+                hunger += 10
+                health += 1
+            if action == "9" and "Cooked wolf meat" in inventory:
+                print ("You eat the cooked wolf meat.")
+                inventory.remove("Cooked wolf meat")
+                hunger += 30
+                health += 5
 
-    #This code executes changing clothing
-    elif action == "g":
-        # This code asks you want you want to wear
-        print ("What do you want to wear?")
-        if BasicClothesName in inventory:
-            print ("    1: "+BasicClothesName)
-        if FlaxClothesName in inventory:
-            print ("    2: "+FlaxClothesName)
-        action = input("")
-        if action == "1" and BasicClothesName in inventory:
-            print ("You put on "+str.lower(BasicClothesName)+".")
-            ClothesName = BasicClothesName
-        elif action == "2" and FlaxClothesName in inventory:
-            print ("You put on "+str.lower(FlaxClothesName)+".")
-            ClothesName = FlaxClothesName
-    #This code executes searching
-    elif action == "s":
-        # This code asks what you want to search for.
-        print ("What do you want to search for?")
-        print ("    b: Berries")
-        print ("    f: Flowers")
-        print ("    t: Twigs and Branches")
-        action = input ("")
-        print ("You have spent some time searching.")
-        if str.lower(action) == "b":
-            count = random.randint(3, 7)
-            while count > 0:
-                find = randchoice(list([BasicBerryName, BasicBerryName, PoisonBerryName]))
-                inventory += [find]
-                print ("You have found "+str.lower(find)+"!")
-                count -= 1
-        elif str.lower(action) == "f":
-            count = random.randint(1, 4)
-            while count > 0:
-                find = randchoice(list([FlaxName, FlaxName, FlaxName]))
-                inventory += [find]
-                print ("You have found "+str.lower(find)+"!")
-                count -= 1
-        elif str.lower(action) == "t":
-            count = random.randint(1, 3)
-            while count > 0:
-                find = randchoice(list([BasicTwigName, BasicTwigName, BasicTwigName, BasicTwigName, BasicTwigName, BasicBranchName, BasicBranchName]))
-                inventory += [find]
-                print ("You have found "+str.lower(find)+"!")
-                count -= 1
-        sleeptime += 1
-        time += 1
-        hunger -= 10
-    #This code executes processing raw materials
-    elif action == "p":
-        #This code asks what you want to process
-        print ("What do you want to process?")
-        if FlaxName in inventory:
-            print ("    1: "+str.lower(FlaxName))
-        action = input("")
-        if action == "1" and FlaxName in inventory:
-            count = random.randint(0, 5)
-            while count > 0:
-                inventory += [FlaxSeedName]
-                print ("You have extracted "+str.lower(FlaxSeedName)+".")
-                count -= 1
-            count = random.randint(1, 2)
-            while count > 0:
-                inventory += [FlaxFibreName]
-                print ("You have extracted "+str.lower(FlaxFibreName)+".")
-                count -= 1
-            inventory.remove(FlaxName)
-        sleeptime += 0.5
-        time += 1
-        hunger -= 3
-    # This code executes resting
-    elif action == "r":
-        print ("You rest for a while, and are now well rested.")
-        hunger -= int(3*sleeptime)
-        time += 1+(sleeptime/2)
-        sleeptime = 0
-        hunger -= 3
-    # This code executes crafting
-    elif action == "c":
-        print ("What do you want to craft?")
-        if FlaxFibreName in inventory:
-            print ("    1: Spin twine out of "+str.lower(FlaxFibreName)+".")
-        if inventory.count(FlaxTwineName) >= 4:
-            print ("    2: Weave fabric out of "+str.lower(FlaxTwineName)+".")
-        if inventory.count(FlaxFabricName) >= 7:
-            print ("    3: Weave fabric out of "+str.lower(FlaxClothesName)+".")
-        action = input("")
-        # This code makes flaxen twine
-        if action == "1" and FlaxFibreName in inventory:
-            inventory.remove(FlaxFibreName)
-            inventory += [FlaxTwineName]
-            print ("You spin "+FlaxTwineName+".")
-            sleeptime += 0.1
-            time += 0.1
-        # This code makes flaxen fabric
-        elif action == "2" and inventory.count(FlaxTwineName) > 3:
-            inventory.remove(FlaxTwineName)
-            inventory.remove(FlaxTwineName)
-            inventory.remove(FlaxTwineName)
-            inventory.remove(FlaxTwineName)
-            inventory += [FlaxFabricName]
-            print ("You weave "+str.lower(FlaxFabricName)+".")
-            sleeptime += 0.5
-            time += 0.5
-            hunger -= 2
-        # This code makes flaxen clothes
-        elif action == "3" and inventory.count(FlaxFabricName) > 7:
-            recurrence = 8
-            while recurrence > 0:
-                inventory.remove(FlaxFabricName)
-                recurrence -= 1
-            inventory += [FlaxClothesName]
-            print ("You make "+str.lower(FlaxClothesName)+".")
-            sleeptime += 0.75
-            time +=0.75
-            hunger -= 3
-    # This code executes building
-    elif action == "b":
-        # This code asks you what you want to build
-        print ("What do you want to build?")
-        if (inventory.count(BasicTwigName)) > 4 and (inventory.count(BasicBranchName)) > 2 and fire != 1 and furnace < 1:
-            print ("    1: A basic campfire")
-        action = input()
-        # This code builds a campfire
-        if action == "1" and (inventory.count(BasicTwigName)) > 4 and (inventory.count(BasicBranchName)) > 2:
-            # This code consumes twigs.
-            count = 5
-            while count > 0:
-                if BasicTwigName in inventory:
-                    inventory.remove(BasicTwigName)
-                count -= 1
-            # This code consumes branches
-            count = 3
-            while count > 0:
-                if BasicBranchName in inventory:
-                    inventory.remove(BasicBranchName)
-                count -= 1
-            # This code creates the campfire and applies it's properties.
-            fire = 1
-            if furnace < 1:
-                furnace = 1
-            # This code manages the time and hunger incurred by building the campfire.
+            #These next lines make sure that you don't have more than 100 hunger and 12 health.
+            if hunger > 100:
+                hunger = 100
+            if health > 12:
+                health = 12
+        #This code executes searching your inventory
+        elif action == "i":
+            print ("You are wearing "+str.lower(ClothesName)+".")
+            count = 0
+            for item in inventory:
+                count += 1
+                print(str(count) + ". " + item)
+
+        #This code executes changing clothing
+        elif action == "g":
+            # This code asks you want you want to wear
+            print ("What do you want to wear?")
+            if BasicClothesName in inventory:
+                print ("    bc: "+BasicClothesName)
+            if FlaxClothesName in inventory:
+                print ("    fc: "+FlaxClothesName)
+            if "A fur coat" in inventory:
+                print ("    co: A warm fur coat")
+            action = input("")
+            if action == "bc" and BasicClothesName in inventory:
+                print ("You put on "+str.lower(BasicClothesName)+".")
+                ClothesName = BasicClothesName
+                if fire == 0:
+                    warm = 0
+            elif action == "fc" and FlaxClothesName in inventory:
+                print ("You put on "+str.lower(FlaxClothesName)+".")
+                ClothesName = FlaxClothesName
+                if fire == 0:
+                    warm = 0
+            elif action == "co" and "A fur coat" in inventory:
+                print ("You put on the fur coat. It is warm.")
+                ClothesName = "A fur coat"
+                warm = 1
+        #This code executes searching
+        elif action == "s":
+            # This code asks what you want to search for.
+            print ("What do you want to search for?")
+            print ("    b: Berries")
+            print ("    f: Flowers")
+            print ("    t: Twigs and Branches")
+            action = input ("")
+            print ("You have spent some time searching.")
+            if str.lower(action) == "b":
+                count = random.randint(3, 7)
+                while count > 0:
+                    find = randchoice(list([BasicBerryName, BasicBerryName, PoisonBerryName]))
+                    inventory += [find]
+                    print ("You have found "+str.lower(find)+"!")
+                    count -= 1
+            elif str.lower(action) == "f":
+                count = random.randint(1, 4)
+                while count > 0:
+                    find = randchoice(list([FlaxName, FlaxName, FlaxName]))
+                    inventory += [find]
+                    print ("You have found "+str.lower(find)+"!")
+                    count -= 1
+            elif str.lower(action) == "t":
+                count = random.randint(1, 3)
+                while count > 0:
+                    find = randchoice(list([BasicTwigName, BasicTwigName, BasicTwigName, BasicTwigName, BasicTwigName, BasicBranchName, BasicBranchName]))
+                    inventory += [find]
+                    print ("You have found "+str.lower(find)+"!")
+                    count -= 1
             sleeptime += 1
+            time += 0.25
+            hunger -= 10
+        #This code executes processing raw materials
+        elif action == "p":
+            #This code asks what you want to process
+            print ("What do you want to process?")
+            if FlaxName in inventory:
+                print ("    1: "+str.lower(FlaxName))
+            action = input("")
+            if action == "1" and FlaxName in inventory:
+                count = random.randint(0, 5)
+                while count > 0:
+                    inventory += [FlaxSeedName]
+                    print ("You have extracted "+str.lower(FlaxSeedName)+".")
+                    count -= 1
+                count = random.randint(1, 2)
+                while count > 0:
+                    inventory += [FlaxFibreName]
+                    print ("You have extracted "+str.lower(FlaxFibreName)+".")
+                    count -= 1
+                inventory.remove(FlaxName)
+            sleeptime += 0.5
             time += 1
-            hunger -= 5
-    print()
-print  ("You have died! Good game. You lasted for "+str(int(4*time))+" hours.")
+            hunger -= 3
+        # This code executes resting
+        elif action == "r":
+            print ("You rest for a while, and are now well rested.")
+            hunger -= int(3*sleeptime)
+            time += 1+(sleeptime/2)
+            sleeptime = 0
+            hunger -= 3
+
+        # This code executes crafting
+        elif action == "c":
+            cancraft = "" #This is similar to the string "canbuild." It remains empty unless you can craft something.
+
+            if FlaxFibreName in inventory:
+                cancraft += ("    tw: Spin twine out of "+str.lower(FlaxFibreName)+".\n")
+            if inventory.count(FlaxTwineName) >= 4:
+                cancraft += ("    ft: Weave fabric out of "+str.lower(FlaxTwineName)+".\n")
+            if inventory.count(FlaxFabricName) >= 7:
+                cancraft += ("    fc: Weave fabric out of "+str.lower(FlaxClothesName)+".\n")
+            if "Wolf Corpse" in inventory:
+                cancraft += ("    sw: Skin the wolf corpse.\n")
+            if "Wolf hide" in inventory:
+                cancraft += ("    wc: Make a fur coat out of wolf hide.\n")
+            if "Raw wolf meat" in inventory and fire == 1:
+                cancraft += ("    cw: Cook the wolf meat over the fire.\n")
+            if cancraft == "":
+                print ("Sorry, you cannot craft anything with your current inventory.")
+            else:
+                print(cancraft)
+                action = input("What do you want to craft?")
+
+                # This code makes flaxen twine
+                if action == "tw" and FlaxFibreName in inventory:
+                    inventory.remove(FlaxFibreName)
+                    inventory += [FlaxTwineName]
+                    print ("You spin "+FlaxTwineName+".")
+                    sleeptime += 0.1
+                    time += 0.1
+                # This code makes flaxen fabric
+                elif action == "ft" and inventory.count(FlaxTwineName) > 3:
+                    inventory.remove(FlaxTwineName)
+                    inventory.remove(FlaxTwineName)
+                    inventory.remove(FlaxTwineName)
+                    inventory.remove(FlaxTwineName)
+                    inventory += [FlaxFabricName]
+                    print ("You weave "+str.lower(FlaxFabricName)+".")
+                    sleeptime += 0.5
+                    time += 0.5
+                    hunger -= 2
+                # This code makes flaxen clothes
+                elif action == "fc" and inventory.count(FlaxFabricName) > 7:
+                    recurrence = 8
+                    while recurrence > 0:
+                        inventory.remove(FlaxFabricName)
+                        recurrence -= 1
+                    inventory += [FlaxClothesName]
+                    print ("You make "+str.lower(FlaxClothesName)+".")
+                    sleeptime += 0.75
+                    time +=0.75
+                    hunger -= 3
+                elif action == "sw" and "Wolf Corpse" in inventory:
+                    sleeptime += 0.75
+                    time += 0.75
+                    hunger -= 3
+                    inventory.remove("Wolf Corpse")
+                    inventory += ["Wolf hide", "Raw wolf meat"]
+                    print ("You skin the wolf. Now, you have a wolf hide and raw wolf meat.")
+                elif action == "wc":
+                    print ("You make a fur coat from the wolf hide.")
+                    inventory.remove("Wolf hide")
+                    sleeptime += 0.75
+                    time += 0.75
+                    hunger -= 3
+                    inventory += ["A fur coat"]
+                elif action == "cw":
+                    inventory.remove("Raw wolf meat")
+                    if random.randint(1, 3) == 1:
+                        print("You burn the wolf meat to a crisp.")
+                        inventory += ["Burnt wolf meat"]
+                    else:
+                        print("You carefully cook the wolf meat. It looks delicious.")
+                        inventory += ["Cooked wolf meat"]
+
+        # This code executes building
+        elif action == "b":
+            # This code asks you what you want to build
+            canbuild = "" #This string will be written to and then printed if the use can build anything. If the user can't build anything, canbuild won't be printed.
+            if (inventory.count(BasicTwigName)) > 4 and (inventory.count(BasicBranchName)) > 2 and furnace < 1:
+                canbuild += ("1: A basic campfire\n")
+            if canbuild == "":
+                print("Sorry, you cannot build anything with your current inventory.")
+            else:
+
+                action = input("What do you want to build? \n" + canbuild)
+                # This code builds a campfire
+                if action == "1" and (inventory.count(BasicTwigName)) > 4 and (inventory.count(BasicBranchName)) > 2:
+                    # This code consumes twigs.
+                    count = 5
+                    while count > 0:
+                        if BasicTwigName in inventory:
+                            inventory.remove(BasicTwigName)
+                        count -= 1
+                    # This code consumes branches
+                    count = 3
+                    while count > 0:
+                        if BasicBranchName in inventory:
+                            inventory.remove(BasicBranchName)
+                        count -= 1
+                    # This code creates the campfire and applies it's properties.
+                    fire = 1
+                    if furnace < 1:
+                        furnace = 1
+                    # This code manages the time and hunger incurred by building the campfire.
+                    sleeptime += 1
+                    time += 1
+                    hunger -= 5
+                    warm = 1
+        elif action == "h":
+            print("Welcome to Foreign world! This is an in-depth explanation of how the commands work. \n"
+                  "i - This lists your inventory.\n"
+                  "e - This lets you eat something from your inventory. It adds to your health levels and subtracts from your hunger levels. Note that some foods are poisonous. Every time you restart the game, the colors of poisonous foods change.\n"
+                  "g - This lets you change clothes if you have made any new clothes (using the craft command)\n"
+                  "s - This lets you gather items for your inventory. You can search for berries, flowers, and twigs/branches.\n"
+                  "p - This lets you process raw materials that you have gathered.\n"
+                  "r - If the game says you are tired, this will make you slightly less tired.\n"
+                  "c - Lets you spin twine, weave fabric, etc.\n"
+                  "b - Lets you build things.\n"
+                  "w - Change weapons, if you have any weapons in your inventory.\n"
+                  "Have fun!\n")
+        print()
+    exitinput = input("You died! Good game. You lasted for "+str(int(4*time))+" hours. Press enter to play again, or type \"quit\" to quit.")
+    if exitinput.lower() == "quit":
+        break
