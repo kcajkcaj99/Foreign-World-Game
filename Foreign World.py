@@ -258,9 +258,8 @@ while True: #everything is in a giant while loop so that the game can be reset a
 
     # The following code sets berry names.
     BasicBerryName = "A "+randchoice(list(["red", "green", "blue", "black", "white", "pink", "purple", "magenta"]))+" berry"
-    BasicBerryName = "A "+randchoice(list(["red", "green", "blue", "black", "white", "pink", "purple", "magenta"]))+" berry"
-    PoisonBerryName = ""
-    while PoisonBerryName == "" or PoisonBerryName == BasicFruitName:
+    PoisonBerryName = BasicBerryName
+    while PoisonBerryName == BasicBerryName:
         PoisonBerryName = "A "+randchoice(list(["red", "green", "blue", "black", "white", "purple", "pink", "magenta"]))+" berry"
 
     # The following code sets flax and flax fabric names.
