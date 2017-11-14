@@ -301,7 +301,7 @@ while True: #everything is in a giant while loop so that the game can be reset a
     damagemin = 1
     damagemax = 4
     event = 0
-
+    fire = 0
     # The following code forms your stats from its parts
     stats = list([health, inventory, armor, mana])
 
@@ -508,21 +508,7 @@ while True: #everything is in a giant while loop so that the game can be reset a
             if FlaxName in inventory:
                 print ("    1: "+str.lower(FlaxName))
             action = input("")
-            if action == "1" and FlaxName in inventory:
-                count = random.randint(0, 5)
-                while count > 0:
-                    inventory += [FlaxSeedName]
-                    print ("You have extracted "+str.lower(FlaxSeedName)+".")
-                    count -= 1
-                count = random.randint(1, 2)
-                while count > 0:
-                    inventory += [FlaxFibreName]
-                    print ("You have extracted "+str.lower(FlaxFibreName)+".")
-                    count -= 1
-                inventory.remove(FlaxName)
-            sleeptime += 0.5
-            time += 1
-            hunger -= 3
+
         # This code executes resting
         elif action == "r":
             print ("You rest for a while, and are now well rested.")
@@ -535,6 +521,8 @@ while True: #everything is in a giant while loop so that the game can be reset a
         elif action == "c":
             cancraft = "" #This is similar to the string "canbuild." It remains empty unless you can craft something.
 
+            if FlaxName in inventory:
+                cancraft += ("    fl: Extract seeds from "+str.lower(FlaxName))
             if FlaxFibreName in inventory:
                 cancraft += ("    tw: Spin twine out of "+str.lower(FlaxFibreName)+".\n")
             if inventory.count(FlaxTwineName) >= 4:
@@ -547,12 +535,29 @@ while True: #everything is in a giant while loop so that the game can be reset a
                 cancraft += ("    wc: Make a fur coat out of wolf hide.\n")
             if "Raw wolf meat" in inventory and fire == 1:
                 cancraft += ("    cw: Cook the wolf meat over the fire.\n")
+            if (inventory.count(BasicTwigName)) > 4 and (inventory.count(BasicBranchName)) > 2 and furnace < 1:
+                cancraft += ("cf: A basic campfire\n")
             if cancraft == "":
                 print ("Sorry, you cannot craft anything with your current inventory.")
             else:
                 print(cancraft)
                 action = input("What do you want to craft?")
 
+                if action == "fl" and FlaxName in inventory:
+                    count = random.randint(0, 5)
+                    while count > 0:
+                        inventory += [FlaxSeedName]
+                        print ("You have extracted " + str.lower(FlaxSeedName) + ".")
+                        count -= 1
+                    count = random.randint(1, 2)
+                    while count > 0:
+                        inventory += [FlaxFibreName]
+                        print ("You have extracted " + str.lower(FlaxFibreName) + ".")
+                        count -= 1
+                    inventory.remove(FlaxName)
+                    sleeptime += 0.5
+                    time += 1
+                    hunger -= 3
                 # This code makes flaxen twine
                 if action == "tw" and FlaxFibreName in inventory:
                     inventory.remove(FlaxFibreName)
@@ -589,14 +594,14 @@ while True: #everything is in a giant while loop so that the game can be reset a
                     inventory.remove("Wolf Corpse")
                     inventory += ["Wolf hide", "Raw wolf meat"]
                     print ("You skin the wolf. Now, you have a wolf hide and raw wolf meat.")
-                elif action == "wc":
+                elif action == "wc" and "Wolf hide" in inventory:
                     print ("You make a fur coat from the wolf hide.")
                     inventory.remove("Wolf hide")
                     sleeptime += 0.75
                     time += 0.75
                     hunger -= 3
                     inventory += ["A fur coat"]
-                elif action == "cw":
+                elif action == "cw" and "Raw wolf meat" in inventory:
                     inventory.remove("Raw wolf meat")
                     if random.randint(1, 3) == 1:
                         print("You burn the wolf meat to a crisp.")
@@ -604,20 +609,10 @@ while True: #everything is in a giant while loop so that the game can be reset a
                     else:
                         print("You carefully cook the wolf meat. It looks delicious.")
                         inventory += ["Cooked wolf meat"]
-
-        # This code executes building
-        elif action == "b":
-            # This code asks you what you want to build
-            canbuild = "" #This string will be written to and then printed if the use can build anything. If the user can't build anything, canbuild won't be printed.
-            if (inventory.count(BasicTwigName)) > 4 and (inventory.count(BasicBranchName)) > 2 and furnace < 1:
-                canbuild += ("1: A basic campfire\n")
-            if canbuild == "":
-                print("Sorry, you cannot build anything with your current inventory.")
-            else:
-
-                action = input("What do you want to build? \n" + canbuild)
-                # This code builds a campfire
-                if action == "1" and (inventory.count(BasicTwigName)) > 4 and (inventory.count(BasicBranchName)) > 2:
+                    sleeptime += 0.75
+                    time += 0.75
+                    hunger -= 3
+                elif action == "cf"and (inventory.count(BasicTwigName)) > 4 and (inventory.count(BasicBranchName)) > 2:
                     # This code consumes twigs.
                     count = 5
                     while count > 0:
@@ -639,17 +634,26 @@ while True: #everything is in a giant while loop so that the game can be reset a
                     time += 1
                     hunger -= 5
                     warm = 1
+
+
         elif action == "h":
             print("Welcome to Foreign world! This is an in-depth explanation of how the commands work. \n"
                   "i - This lists your inventory.\n"
                   "e - This lets you eat something from your inventory. It adds to your health levels and subtracts from your hunger levels. Note that some foods are poisonous. Every time you restart the game, the colors of poisonous foods change.\n"
                   "g - This lets you change clothes if you have made any new clothes (using the craft command)\n"
                   "s - This lets you gather items for your inventory. You can search for berries, flowers, and twigs/branches.\n"
-                  "p - This lets you process raw materials that you have gathered.\n"
                   "r - If the game says you are tired, this will make you slightly less tired.\n"
-                  "c - Lets you spin twine, weave fabric, etc.\n"
-                  "b - Lets you build things.\n"
-                  "w - Change weapons, if you have any weapons in your inventory.\n"
+                  "c - Lets you make/cook/process things. See below for a crafting guide.\n"
+                  "w - Change weapons, if you have any weapons in your inventory.\n\n\n"
+                  "CRAFTING GUIDE\n"
+                  "1x flower ---> 0-5x flax seeds & 1-2x flax fibre\n"
+                  "1x flax fibre ---> 1x flaxen twine\n"
+                  "4x flaxen twine --->1x flaxen fabric\n"
+                  "8x flaxen fabric ---> 1x flaxen clothing\n"
+                  "5x twigs & 3x branches ---> 1 campfire\n"
+                  "1x wolf corpse ---> 1x wolf hide & 1x raw wolf meat\n"
+                  "1x wolf hide ---> 1x fur coat\n"
+                  "1x raw wolf meat ---> 1x cooked wolf meat or 1x burnt wolf meat (requires campfire to cook)\n"
                   "Have fun!\n")
         print()
     exitinput = input("You died! Good game. You lasted for "+str(int(4*time))+" hours. Press enter to play again, or type \"quit\" to quit.")
