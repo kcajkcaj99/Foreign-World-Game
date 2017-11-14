@@ -349,10 +349,8 @@ while True: #everything is in a giant while loop so that the game can be reset a
         print ("    e: Eat something.")
         print ("    g: Change garments")
         print ("    s: Search for things")
-        print ("    p: Process raw materials")
         print ("    r: Rest")
         print ("    c: Craft")
-        print ("    b: Build")
         print ("    w: Change weapons")
         print ("    h: Help")
         action = str.lower(input (""))
@@ -522,7 +520,7 @@ while True: #everything is in a giant while loop so that the game can be reset a
             cancraft = "" #This is similar to the string "canbuild." It remains empty unless you can craft something.
 
             if FlaxName in inventory:
-                cancraft += ("    fl: Extract seeds from "+str.lower(FlaxName))
+                cancraft += ("    fl: Extract seeds from "+str.lower(FlaxName) + ".\n")
             if FlaxFibreName in inventory:
                 cancraft += ("    tw: Spin twine out of "+str.lower(FlaxFibreName)+".\n")
             if inventory.count(FlaxTwineName) >= 4:
