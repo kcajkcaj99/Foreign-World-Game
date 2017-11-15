@@ -763,4 +763,3 @@ while True: #everything is in a giant while loop so that the game can be reset a
     exitinput = input("You died! You lasted for "+str(int(4*time))+" hours. Press enter to play again, or type \"quit\" to quit.")
     if exitinput.lower() == "quit":
         break
->>>>>>> a5231ce4bd19c2a1b526f22026059d789982250f
