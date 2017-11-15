@@ -108,7 +108,7 @@ def combat(cstats, cdamagemin, cdamagemax, cweapon, etype, elocation, cmagic):
     burnout = 0
 
     # This runs the combat
-    while chealth > 0 and ehealth > 0:
+    while chealth > 0 and ehealth > 0 and health > 0:
         # This code asks you what you want to do.
         print ("What do you do?")
         print ("    1: Nothing.")
@@ -324,7 +324,10 @@ while True: #everything is in a giant while loop so that the game can be reset a
             break
         # This code asks what you want to do
         print("So far, you have survived for " + str(4*time) + " hours.")
-        print("Your health: " + str(health))
+        print("Your health: " + str(health) + "/12")
+        print("Your hunger level: " + str(hunger) + "/100 (higher is more full)")
+        hungerstr = "You are not hungry."
+
         if warm == 0:
             randchance = random.randint(1, 3)
             if randchance == 1:
@@ -332,7 +335,7 @@ while True: #everything is in a giant while loop so that the game can be reset a
                 health -= timediff
             else:
                 print ("You are cold.")
-        if time > 4 and event == 0:
+        if (time > 6 and event == 0) or (random.randint(1, 40) == 1 and event == 1):
             print()
             stats = list([health, inventory, armor, mana])
             stats = combat(stats, damagemin, damagemax, weapon, "Wolf", "Field", magic)
@@ -341,6 +344,7 @@ while True: #everything is in a giant while loop so that the game can be reset a
             armor = stats[2]
             mana = stats[3]
             if health < 1:
+
                 break
             event = 1
         inittime = time
@@ -351,8 +355,9 @@ while True: #everything is in a giant while loop so that the game can be reset a
         print ("    s: Search for things")
         print ("    r: Rest")
         print ("    c: Craft")
-        print ("    w: Change weapons")
-        print ("    h: Help")
+        print ("    h: Hunt")
+      #  print ("    w: Change weapons")
+        print ("    ?: Help")
         action = str.lower(input (""))
         print()
         # This code executes eating
@@ -376,6 +381,14 @@ while True: #everything is in a giant while loop so that the game can be reset a
                 print ("    7: Raw wolf meat")
             if "Burnt wolf meat" in inventory:
                 print ("    8: Burnt wolf meat")
+            if "Cooked wolf meat" in inventory:
+                print ("    9: Cooked wolf meat")
+            if "Raw rabbit meat" in inventory:
+                print ("    10: Raw rabbit meat")
+            if "Cooked rabbit meat" in inventory:
+                print ("    11: Cooked rabbit meat")
+            if "Burnt rabbit meat" in inventory:
+                print ("    12: Burnt rabbit meat")
             action = input("")
             print()
             # This code runs the results of what you eat.
@@ -427,6 +440,24 @@ while True: #everything is in a giant while loop so that the game can be reset a
                 inventory.remove("Cooked wolf meat")
                 hunger += 30
                 health += 5
+            if action == "10" and "Raw rabbit meat" in inventory:
+                inventory.remove("Raw rabbit meat")
+                if random.randint(0, 1) == 0: #Sometimes it should make you sick, sometimes it shouldn't.
+                    print("You eat the raw rabbit meat.")
+                    hunger += 10
+                    health += 1
+                else:
+                    print("You eat the raw rabbit meat. It makes you feel sick.")
+                    health -= random.randint(2, 4)
+            if action == "11" and "Cooked rabbit meat" in inventory:
+                print ("You eat the cooked rabbit meat.")
+                inventory.remove("Cooked rabbit meat")
+                hunger += 17
+                health += 2
+            if action == "12" and "Burnt rabbit meat" in inventory:
+                print ("You eat the burnt rabbit meat. It tastes disgusting.")
+                inventory.remove("Burnt rabbit meat")
+                hunger += 7
 
             #These next lines make sure that you don't have more than 100 hunger and 12 health.
             if hunger > 100:
@@ -533,10 +564,17 @@ while True: #everything is in a giant while loop so that the game can be reset a
                 cancraft += ("    wc: Make a fur coat out of wolf hide.\n")
             if "Raw wolf meat" in inventory and fire == 1:
                 cancraft += ("    cw: Cook the wolf meat over the fire.\n")
-            if (inventory.count(BasicTwigName)) > 4 and (inventory.count(BasicBranchName)) > 2 and furnace < 1:
-                cancraft += ("cf: A basic campfire\n")
+            if (inventory.count(BasicTwigName)) > 3 and (inventory.count(BasicBranchName)) > 1 and furnace < 1:
+                cancraft += ("    cf: A basic campfire consisting of 4 twigs and 2 branches.\n")
+            if BasicBranchName in inventory:
+                cancraft += ("    rc: A rabit's club for hunting game.")
+            if "Rabbit corpse" in inventory:
+                cancraft += ("    sr: Skin a rabbit's corpse")
+            if "Raw rabbit meat" in inventory:
+                cancraft += ("    cr: Cook the raw rabbit meat")
             if cancraft == "":
                 print ("Sorry, you cannot craft anything with your current inventory.")
+
             else:
                 print(cancraft)
                 action = input("What do you want to craft?")
@@ -610,15 +648,15 @@ while True: #everything is in a giant while loop so that the game can be reset a
                     sleeptime += 0.75
                     time += 0.75
                     hunger -= 3
-                elif action == "cf"and (inventory.count(BasicTwigName)) > 4 and (inventory.count(BasicBranchName)) > 2:
+                elif action == "cf"and (inventory.count(BasicTwigName)) > 3 and (inventory.count(BasicBranchName)) > 1:
                     # This code consumes twigs.
-                    count = 5
+                    count = 4
                     while count > 0:
                         if BasicTwigName in inventory:
                             inventory.remove(BasicTwigName)
                         count -= 1
                     # This code consumes branches
-                    count = 3
+                    count = 2
                     while count > 0:
                         if BasicBranchName in inventory:
                             inventory.remove(BasicBranchName)
@@ -632,28 +670,73 @@ while True: #everything is in a giant while loop so that the game can be reset a
                     time += 1
                     hunger -= 5
                     warm = 1
-
+                elif action == "rc" and BasicBranchName in inventory:
+                    print("You make a rabbit's club. Now you can hunt rabbits!")
+                    inventory.remove(BasicBranchName)
+                    inventory += ["Rabbit's club"]
+                    sleeptime += 1
+                    time += 1
+                    hunger -= 5
+                elif action == "sr" and "Rabbit corpse" in inventory:
+                    #This code skins a rabbit corpse
+                    print ("You skin the rabbit's corpse. Now, you have a rabbit hide, a rabbit's foot, and raw rabbit meat.")
+                    inventory.remove("Rabbit corpse")
+                    inventory += ["Rabbit hide", "Rabbit foot", "Raw rabbit meat"]
+                    sleeptime += 1
+                    time += 1
+                    hunger -= 5
+                elif action == "cr" and "Raw rabbit meat" in inventory:
+                    inventory.remove("Raw rabbit meat")
+                    if random.randint(1, 3) == 1:
+                        print("You burn the rabbit meat to a crisp.")
+                        inventory += ["Burnt rabbit meat"]
+                    else:
+                        print("You carefully cook the rabbit meat. It looks delicious.")
+                        inventory += ["Cooked rabbit meat"]
+                    sleeptime += 0.75
+                    time += 0.75
+                    hunger -= 3
 
         elif action == "h":
+            #This code facilitates hunting.
+            canhunt = ""
+            if "Rabbit's club" in inventory:
+                canhunt += "r: Hunt rabbits"
+            if canhunt == "":
+                print("Sorry, you need to craft a weapon in order to hunt.")
+            else:
+                print("What do you want to hunt?")
+                action = input(canhunt)
+                if str.lower(action) == "r" and "Rabbit's club" in inventory:
+                    outcome = random.randint(1, 3)
+                    if outcome == 1:
+                        print ("You see a rabbit and throw your club at it. You hit it! You collect the rabbit corpse.")
+                        inventory += ["Rabbit corpse"]
+                    elif outcome == 2:
+                        print ("You see a rabbit and throw your club at it. You miss.")
+                    else:
+                        print ("You go looking for game but you cannot find anything.")
+                health -= 1
+                hunger -= 10
+        elif action == "?":
             print("Welcome to Foreign world! This is an in-depth explanation of how the commands work. \n"
                   "i - This lists your inventory.\n"
                   "e - This lets you eat something from your inventory. It adds to your health levels and subtracts from your hunger levels. Note that some foods are poisonous. Every time you restart the game, the colors of poisonous foods change.\n"
                   "g - This lets you change clothes if you have made any new clothes (using the craft command)\n"
                   "s - This lets you gather items for your inventory. You can search for berries, flowers, and twigs/branches.\n"
-                  "r - If the game says you are tired, this will make you slightly less tired.\n"
+                  "r - If the game says you are tired, this will make you slightly less tired. But beware of wolves!\n"
                   "c - Lets you make/cook/process things. See below for a crafting guide.\n"
-                  "w - Change weapons, if you have any weapons in your inventory.\n\n\n"
-                  "CRAFTING GUIDE\n"
-                  "1x flower ---> 0-5x flax seeds & 1-2x flax fibre\n"
-                  "1x flax fibre ---> 1x flaxen twine\n"
-                  "4x flaxen twine --->1x flaxen fabric\n"
-                  "8x flaxen fabric ---> 1x flaxen clothing\n"
-                  "5x twigs & 3x branches ---> 1 campfire\n"
-                  "1x wolf corpse ---> 1x wolf hide & 1x raw wolf meat\n"
-                  "1x wolf hide ---> 1x fur coat\n"
-                  "1x raw wolf meat ---> 1x cooked wolf meat or 1x burnt wolf meat (requires campfire to cook)\n"
+                  "h - Hunting requires a weapon, such as a rabbit's club. If done successfully, you get an animal corpse."
+           #       "w - Change weapons, if you have any weapons in your inventory.\n\n\n"
+                  "A good way to start is to gather enough twigs and branches to start a fire."
                   "Have fun!\n")
         print()
-    exitinput = input("You died! Good game. You lasted for "+str(int(4*time))+" hours. Press enter to play again, or type \"quit\" to quit.")
+        if health <= 0:
+            print ("Your health is below 0!")
+            break
+        if hunger <= 0:
+            print ("You are starving!")
+            break
+    exitinput = input("You died! You lasted for "+str(int(4*time))+" hours. Press enter to play again, or type \"quit\" to quit.")
     if exitinput.lower() == "quit":
         break
