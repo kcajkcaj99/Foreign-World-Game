@@ -99,7 +99,7 @@ def combat(cstats, cdamagemin, cdamagemax, cweapon, etype, elocation, cmagic, et
 
     # This code writes a description based on the location and enemy type.
     if elocation == "Field":
-        starterdescription = ("A "+str.lower(etitle)+" stands in the grass ahead of you, bearing its "+str.lower(eweaponname)+".")
+        starterdescription = (etitle+" stands in the grass ahead of you, bearing its "+str.lower(eweaponname)+".")
 
     # This introduces the combat
     print (starterdescription)
