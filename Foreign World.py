@@ -26,7 +26,7 @@ def formstring (listz):
     return word
 
 # The following code defines how combat works
-def combat(cstats, cdamagemin, cdamagemax, cweapon, etype, elocation, cmagic):
+def combat(cstats, cdamagemin, cdamagemax, cweapon, etype, elocation, cmagic, extraestats):
     # The following code defines how to remove punctuation
 
     def removepunc(listx):
@@ -93,8 +93,9 @@ def combat(cstats, cdamagemin, cdamagemax, cweapon, etype, elocation, cmagic):
         earmor = 1
         eweaponname = "Bite"
         earmorname = "Fur"
-        einventory = list(["Wolf Corpse"])
+        einventory = list([extraestats[1]])
         eai = "Aggressive"
+        etype = extraestats[0]
 
     # This code writes a description based on the location and enemy type.
     if elocation == "Field":
@@ -254,7 +255,7 @@ while TertiaryFruitName == "" or TertiaryFruitName == BasicFruitName or Tertiary
 # The following code sets berry names.
 BasicBerryName = "A "+randchoice(list(["red", "green", "blue", "black", "white", "pink", "purple", "magenta"]))+" berry"
 PoisonBerryName = ""
-while PoisonBerryName == "" or PoisonBerryName == BasicFruitName:
+while PoisonBerryName == "" or PoisonBerryName == BasicBerryName:
     PoisonBerryName = "A "+randchoice(list(["red", "green", "blue", "black", "white", "purple", "pink", "magenta"]))+" berry"
 
 # The following code sets flax and flax fabric names.
@@ -278,6 +279,14 @@ BasicClothesName = "Clothes made from " + str.lower(BasicFabricName)
 BasicWoodName = "A "+randchoice(list(["dark", "light", "red", "pale"]))+" wood"
 BasicTwigName = "A twig made of "+str.lower(BasicWoodName)
 BasicBranchName = "A branch made of "+str.lower(BasicWoodName)
+
+# The following code sets Wolf related names
+WolfFurColor = randchoice(["Grey", "White", "Black", "Brown"])
+WolfName = "A fanged, bipedal "+str.lower(WolfFurColor)+"-furred animal"
+WolfFurName = "A piece of "+str.lower(WolfFurColor)+" fur"
+WolfFangName = "A "+randchoice(["curved", "long", "serrated"])+" fang"
+WolfCorpseName = "The corpse of "+str.lower(WolfName)
+WolfMeatName = "The uncooked meat of "+str.lower(WolfName)
 
 # The following code sets your characters abilities
 health = 12
@@ -352,7 +361,7 @@ while True:
     if time > 4 and event == 0:
         print()
         stats = list([health, inventory, armor, mana])
-        stats = combat(stats, damagemin, damagemax, weapon, "Wolf", "Field", magic)
+        stats = combat(stats, damagemin, damagemax, weapon, "Wolf", "Field", magic, list([WolfName, WolfCorpseName]))
         health = stats[0]
         inventory = stats[1]
         armor = stats[2]
@@ -445,6 +454,17 @@ while True:
         elif action == "2" and FlaxClothesName in inventory:
             print ("You put on "+str.lower(FlaxClothesName)+".")
             ClothesName = FlaxClothesName
+    #This code executes changing weapons
+    elif action == "w":
+        # This code asks you want you want to wield
+        print ("What do you want to wield?")
+        print ("    1: "+BasicClothesName)
+        action = input("")
+        if action == "1":
+            print ("You are wielding your fists.")
+            weapon = "Fists"
+            damagemin = 1
+            damagemax = 4
     #This code executes searching
     elif action == "s":
         # This code asks what you want to search for.
@@ -484,7 +504,10 @@ while True:
         print ("What do you want to process?")
         if FlaxName in inventory:
             print ("    1: "+str.lower(FlaxName))
+        if WolfCorpseName in inventory:
+            print ("    2: "+str.lower(WolfCorpseName))
         action = input("")
+        # This code processes the flax plant
         if action == "1" and FlaxName in inventory:
             count = random.randint(0, 5)
             while count > 0:
@@ -497,6 +520,24 @@ while True:
                 print ("You have extracted "+str.lower(FlaxFibreName)+".")
                 count -= 1
             inventory.remove(FlaxName)
+        # This code process a wolf corpse.
+        if action == "2" and WolfCorpseName in inventory:
+            count = random.randint(1, 3)
+            while count > 0:
+                inventory += [WolfFurName]
+                print ("You have extracted"+str.lower(WolfFurName)+".")
+                count -= 1
+            count = random.randint(1, 2)
+            while count > 0:
+                inventory += [WolfMeatName]
+                print ("You have extracted "+str.lower(WolfMeatName)+".")
+                count -= 1
+            count = random.randint(0, 2)
+            while count > 0:
+                inventory += [WolfFangName]
+                print ("You have extracted "+str.lower(WolfFangName)+".")
+                count -= 1
+            inventory.remove(WolfCorpseName)
         sleeptime += 0.5
         time += 1
         hunger -= 3
