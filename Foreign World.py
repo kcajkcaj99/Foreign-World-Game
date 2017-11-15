@@ -291,7 +291,7 @@ while True: #everything is in a giant while loop so that the game can be reset a
     mana = 10
     magic = 0
     hunger = 75
-    ClothesName = BasicClothesName
+    ClothesName = [BasicClothesName]
     sleeptime = 0
     warm = 0
     furnace = 0
@@ -302,6 +302,8 @@ while True: #everything is in a giant while loop so that the game can be reset a
     damagemax = 4
     event = 0
     fire = 0
+    luck = 0
+    starving = 0
     # The following code forms your stats from its parts
     stats = list([health, inventory, armor, mana])
 
@@ -326,6 +328,8 @@ while True: #everything is in a giant while loop so that the game can be reset a
         print("So far, you have survived for " + str(4*time) + " hours.")
         print("Your health: " + str(health) + "/12")
         print("Your hunger level: " + str(hunger) + "/100 (higher is more full)")
+        if luck > 0:
+            print("Your good luck score: " + str(luck))
         hungerstr = "You are not hungry."
 
         if warm == 0:
@@ -466,7 +470,9 @@ while True: #everything is in a giant while loop so that the game can be reset a
                 health = 12
         #This code executes searching your inventory
         elif action == "i":
-            print ("You are wearing "+str.lower(ClothesName)+".")
+            print ("You are wearing: ")
+            for x in ClothesName:
+                print(x)
             count = 0
             for item in inventory:
                 count += 1
@@ -476,27 +482,34 @@ while True: #everything is in a giant while loop so that the game can be reset a
         elif action == "g":
             # This code asks you want you want to wear
             print ("What do you want to wear?")
-            if BasicClothesName in inventory:
-                print ("    bc: "+BasicClothesName)
-            if FlaxClothesName in inventory:
-                print ("    fc: "+FlaxClothesName)
-            if "A fur coat" in inventory:
+            if BasicClothesName in inventory and (not BasicClothesName in ClothesName):
+                print ("    bc: "+ BasicClothesName)
+            if FlaxClothesName in inventory and (not FlaxClothesName in ClothesName):
+                print ("    fc: "+ FlaxClothesName)
+            if "A fur coat" in inventory and (not "A fur coat" in ClothesName):
                 print ("    co: A warm fur coat")
+            if "A good luck charm" in inventory and (not "A good luck charm" in ClothesName):
+                print ("    gl: A good luck charm")
             action = input("")
             if action == "bc" and BasicClothesName in inventory:
                 print ("You put on "+str.lower(BasicClothesName)+".")
-                ClothesName = BasicClothesName
+                ClothesName += [BasicClothesName]
                 if fire == 0:
                     warm = 0
             elif action == "fc" and FlaxClothesName in inventory:
                 print ("You put on "+str.lower(FlaxClothesName)+".")
-                ClothesName = FlaxClothesName
+                ClothesName += [FlaxClothesName]
                 if fire == 0:
                     warm = 0
             elif action == "co" and "A fur coat" in inventory:
                 print ("You put on the fur coat. It is warm.")
-                ClothesName = "A fur coat"
+                ClothesName += ["A fur coat"]
                 warm = 1
+            elif action == "gl":
+                print ("You put on the good luck charm. It gives you a +5 good luck score!")
+                ClothesName += ["A good luck charm"]
+                luck = 5
+                luck = 5
         #This code executes searching
         elif action == "s":
             # This code asks what you want to search for.
@@ -567,11 +580,13 @@ while True: #everything is in a giant while loop so that the game can be reset a
             if (inventory.count(BasicTwigName)) > 3 and (inventory.count(BasicBranchName)) > 1 and furnace < 1:
                 cancraft += ("    cf: A basic campfire consisting of 4 twigs and 2 branches.\n")
             if BasicBranchName in inventory:
-                cancraft += ("    rc: A rabit's club for hunting game.")
+                cancraft += ("    rc: A rabit's club for hunting game.\n")
             if "Rabbit corpse" in inventory:
-                cancraft += ("    sr: Skin a rabbit's corpse")
+                cancraft += ("    sr: Skin a rabbit's corpse\n")
             if "Raw rabbit meat" in inventory:
-                cancraft += ("    cr: Cook the raw rabbit meat")
+                cancraft += ("    cr: Cook the raw rabbit meat\n")
+            if "Rabbit foot" in inventory and FlaxTwineName in inventory:
+                cancraft += ("    gl: Make a \"Good luck\" charm")
             if cancraft == "":
                 print ("Sorry, you cannot craft anything with your current inventory.")
 
@@ -696,6 +711,11 @@ while True: #everything is in a giant while loop so that the game can be reset a
                     sleeptime += 0.75
                     time += 0.75
                     hunger -= 3
+                elif action == "gl" and "Rabbit foot" in inventory and FlaxTwineName in inventory:
+                    inventory.remove("Rabbit foot")
+                    inventory.remove(FlaxTwineName)
+                    print("You make a good luck charm! Wear it to get good luck.")
+                    inventory += ["A good luck charm"]
 
         elif action == "h":
             #This code facilitates hunting.
@@ -732,11 +752,13 @@ while True: #everything is in a giant while loop so that the game can be reset a
                   "Have fun!\n")
         print()
         if health <= 0:
-            print ("Your health is below 0!")
+            print ("Your health is below 0! You die!")
             break
-        if hunger <= 0:
-            print ("You are starving!")
-            break
+        if hunger <= 0 and starving == 0:
+            print ("You are starving! You need to eat something quick!")
+            hunger = 1
+        if hunger <= 0 and (not starving == 0):
+            print ("You died of hunger!")
     exitinput = input("You died! You lasted for "+str(int(4*time))+" hours. Press enter to play again, or type \"quit\" to quit.")
     if exitinput.lower() == "quit":
         break
