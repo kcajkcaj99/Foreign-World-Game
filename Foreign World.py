@@ -407,17 +407,17 @@ while True: #everything is in a giant while loop so that the game can be reset a
                 print ("You eat "+str.lower(BasicFruitName))
                 inventory.remove(BasicFruitName)
                 hunger += 15
-                health += 2
+                health += 0.5
             if action == "2" and SecondaryFruitName in inventory:
                 print ("You eat "+str.lower(SecondaryFruitName))
                 inventory.remove(SecondaryFruitName)
                 hunger += 20
-                health += 2
+                health += 0.5
             if action == "3" and TertiaryFruitName in inventory:
                 print ("You eat "+str.lower(TertiaryFruitName))
                 inventory.remove(TertiaryFruitName)
                 hunger += 20
-                health += 2
+                health += 0.5
             if action == "4" and PoisonBerryName in inventory:
                 print ("You eat "+str.lower(PoisonBerryName)+". It makes you feel sick.")
                 inventory.remove(PoisonBerryName)
@@ -426,12 +426,12 @@ while True: #everything is in a giant while loop so that the game can be reset a
                 print ("You eat "+str.lower(BasicBerryName))
                 inventory.remove(BasicBerryName)
                 hunger += 5
-                health += 1
+                health += 0.25
             if action == "6" and FlaxSeedName in inventory:
                 print ("You eat "+str.lower(FlaxSeedName))
                 inventory.remove(FlaxSeedName)
                 hunger += 2
-                health += 1
+                health += 0.25
             if action == "7" and "Raw wolf meat" in inventory:
                 inventory.remove("Raw wolf meat")
                 if random.randint(0, 1) == 0: #Sometimes it should make you sick, sometimes it shouldn't.
