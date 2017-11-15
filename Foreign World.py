@@ -284,7 +284,7 @@ while True: #everything is in a giant while loop so that the game can be reset a
     BasicWoodName = "A "+randchoice(list(["dark", "light", "red", "pale"]))+" wood"
     BasicTwigName = "A twig made of "+str.lower(BasicWoodName)
     BasicBranchName = "A branch made of "+str.lower(BasicWoodName)
-
+    RabbitsClubName = "A rabbit's club made of " + str.lower(BasicWoodName)
     # The following code sets your characters abilities
     health = 12
     inventory = list ([BasicFruitName, BasicFruitName, BasicFruitName, SecondaryFruitName, BasicClothesName])
@@ -304,6 +304,7 @@ while True: #everything is in a giant while loop so that the game can be reset a
     event = 0
     fire = 0
     luck = 0
+    firetime = -1 #If the player makes a campfire, this is the # of hours since the fire has been started. It dies down after 24 hours of not being fed. The player can feed it with twigs and branches.
     starving = 0
     # The following code forms your stats from its parts
     stats = list([health, inventory, armor, mana])
@@ -329,6 +330,8 @@ while True: #everything is in a giant while loop so that the game can be reset a
         print("So far, you have survived for " + str(4*time) + " hours.")
         print("Your health: " + str(health) + "/12")
         print("Your hunger level: " + str(hunger) + "/100 (higher is more full)")
+        if fire == 1:
+            print("Your fire should burn for " + str(firetime) + " more hours.")
         if luck > 0:
             print("Your good luck score: " + str(luck))
         hungerstr = "You are not hungry."
@@ -353,14 +356,17 @@ while True: #everything is in a giant while loop so that the game can be reset a
                 break
             event = 1
         inittime = time
+
         print ("What do you want to do?")
         print ("    i: Inspect your Inventory")
-        print ("    e: Eat something.")
+        print ("    e: Eat something")
         print ("    g: Change garments")
         print ("    s: Search for things")
         print ("    r: Rest")
         print ("    c: Craft")
         print ("    h: Hunt")
+        if fire == 1:
+            print("    f: Feed the campfire")
       #  print ("    w: Change weapons")
         print ("    ?: Help")
         action = str.lower(input (""))
@@ -474,6 +480,7 @@ while True: #everything is in a giant while loop so that the game can be reset a
             print ("You are wearing: ")
             for x in ClothesName:
                 print(x)
+            print("\nYour inventory:\n")
             count = 0
             for item in inventory:
                 count += 1
@@ -509,7 +516,6 @@ while True: #everything is in a giant while loop so that the game can be reset a
             elif action == "gl":
                 print ("You put on the good luck charm. It gives you a +5 good luck score!")
                 ClothesName += ["A good luck charm"]
-                luck = 5
                 luck = 5
         #This code executes searching
         elif action == "s":
@@ -578,10 +584,10 @@ while True: #everything is in a giant while loop so that the game can be reset a
                 cancraft += ("    wc: Make a fur coat out of wolf hide.\n")
             if "Raw wolf meat" in inventory and fire == 1:
                 cancraft += ("    cw: Cook the wolf meat over the fire.\n")
-            if (inventory.count(BasicTwigName)) > 3 and (inventory.count(BasicBranchName)) > 1 and furnace < 1:
+            if (inventory.count(BasicTwigName)) > 3 and (inventory.count(BasicBranchName)) > 1:
                 cancraft += ("    cf: A basic campfire consisting of 4 twigs and 2 branches.\n")
             if BasicBranchName in inventory:
-                cancraft += ("    rc: A rabit's club for hunting game.\n")
+                cancraft += ("    rc: " + RabbitsClubName + " for hunting game.\n")
             if "Rabbit corpse" in inventory:
                 cancraft += ("    sr: Skin a rabbit's corpse\n")
             if "Raw rabbit meat" in inventory:
@@ -686,10 +692,11 @@ while True: #everything is in a giant while loop so that the game can be reset a
                     time += 1
                     hunger -= 5
                     warm = 1
+                    firetime = 24
                 elif action == "rc" and BasicBranchName in inventory:
-                    print("You make a rabbit's club. Now you can hunt rabbits!")
+                    print("You make " + str.lower(RabbitsClubName) + ". Now you can hunt rabbits!")
                     inventory.remove(BasicBranchName)
-                    inventory += ["Rabbit's club"]
+                    inventory += [RabbitsClubName]
                     sleeptime += 1
                     time += 1
                     hunger -= 5
@@ -721,14 +728,14 @@ while True: #everything is in a giant while loop so that the game can be reset a
         elif action == "h":
             #This code facilitates hunting.
             canhunt = ""
-            if "Rabbit's club" in inventory:
+            if RabbitsClubName in inventory:
                 canhunt += "r: Hunt rabbits"
             if canhunt == "":
                 print("Sorry, you need to craft a weapon in order to hunt.")
             else:
                 print("What do you want to hunt?")
                 action = input(canhunt)
-                if str.lower(action) == "r" and "Rabbit's club" in inventory:
+                if str.lower(action) == "r" and RabbitsClubName in inventory:
                     outcome = random.randint(1, 3)
                     if outcome == 1:
                         print ("You see a rabbit and throw your club at it. You hit it! You collect the rabbit corpse.")
@@ -739,6 +746,27 @@ while True: #everything is in a giant while loop so that the game can be reset a
                         print ("You go looking for game but you cannot find anything.")
                 health -= 1
                 hunger -= 10
+        elif action == "f" and fire == 1:
+            canfeed = ""
+
+            if BasicBranchName in inventory:
+                canfeed += "     b: " + str.lower(BasicBranchName) + "\n"
+            if BasicTwigName in inventory:
+                canfeed += "     t: " + str.lower(BasicTwigName) + "\n"
+
+            if canfeed == "":
+                print("Sorry, you need a twig or a branch to feed the fire with.")
+            else:
+                print("What do you want to feed the fire with?")
+                print("The fire will last for " + str(firetime) + "more hours.")
+                action = input(canfeed)
+                if action == "b" and BasicBranchName in inventory:
+                    inventory.remove(BasicBranchName)
+                    firetime += 4
+                if action == "t" and BasicTwigName in inventory:
+                    inventory.remove(BasicTwigName)
+                    firetime += 2
+
         elif action == "?":
             print("Welcome to Foreign world! This is an in-depth explanation of how the commands work. \n"
                   "i - This lists your inventory.\n"
@@ -752,6 +780,12 @@ while True: #everything is in a giant while loop so that the game can be reset a
                   "A good way to start is to gather enough twigs and branches to start a fire."
                   "Have fun!\n")
         print()
+        firetime -= timediff*4
+        if firetime <= 0 and fire == 1:
+            print("Your fire died out! Remember to feed it with twigs and branches.")
+            fire = 0
+            if not ("A fur coat" in ClothesName):
+                warm = 0
         if health <= 0:
             print ("Your health is below 0! You die!")
             break
