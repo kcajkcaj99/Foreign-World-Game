@@ -27,7 +27,7 @@ def formstring (listz):
     return word
 
 # The following code defines how combat works
-def combat(cstats, cdamagemin, cdamagemax, cweapon, etype, elocation, cmagic):
+def combat(cstats, cdamagemin, cdamagemax, cweapon, etype, elocation, cmagic, etitle):
     # The following code defines how to remove punctuation
 
     def removepunc(listx):
@@ -87,19 +87,19 @@ def combat(cstats, cdamagemin, cdamagemax, cweapon, etype, elocation, cmagic):
         einventory = list(["Spear", "Mail Armor"])
         eai = "Aggressive"
     elif etype == "Wolf":
-        ehealth = 5
-        ehealthmax = 5
+        ehealth = 7
+        ehealthmax = 7
         eatkmin = 2
         eatkmax = 5
         earmor = 1
         eweaponname = "Bite"
         earmorname = "Fur"
-        einventory = list(["Wolf Corpse"])
+        einventory = list([("The coat of a "+str.lower(etitle)+".")])
         eai = "Aggressive"
 
     # This code writes a description based on the location and enemy type.
     if elocation == "Field":
-        starterdescription = ("A "+str.lower(etype)+" stands in the grass ahead of you, bearing its "+str.lower(eweaponname)+".")
+        starterdescription = ("A "+str.lower(etitle)+" stands in the grass ahead of you, bearing its "+str.lower(eweaponname)+".")
 
     # This introduces the combat
     print (starterdescription)
@@ -343,7 +343,7 @@ while True: #everything is in a giant while loop so that the game can be reset a
         if (time > 6 and event == 0) or (random.randint(1, 40) == 1 and event == 1):
             print()
             stats = list([health, inventory, armor, mana])
-            stats = combat(stats, damagemin, damagemax, weapon, "Wolf", "Field", magic)
+            stats = combat(stats, damagemin, damagemax, weapon, "Wolf", "Field", magic, "Wolf")
             health = stats[0]
             inventory = stats[1]
             armor = stats[2]
