@@ -280,6 +280,15 @@ while True: #everything is in a giant while loop so that the game can be reset a
     # The following code sets items made of various materials names
     BasicClothesName = "Clothes made from " + str.lower(BasicFabricName)
 
+    # The following code sets Wolf related names
+    WolfFurColor = randchoice(["Grey", "White", "Black", "Brown"])
+    WolfName = "A fanged, bipedal "+str.lower(WolfFurColor)+"-furred animal"
+    WolfFurName = "A piece of "+str.lower(WolfFurColor)+" fur"
+    WolfFangName = "A "+randchoice(["curved", "long", "serrated"])+" fang"
+    WolfCorpseName = "The corpse of "+str.lower(WolfName)
+    WolfMeatName = "The uncooked meat of "+str.lower(WolfName)
+
+
     # The following code sets wood names.
     BasicWoodName = "A "+randchoice(list(["dark", "light", "red", "pale"]))+" wood"
     BasicTwigName = "A twig made of "+str.lower(BasicWoodName)
@@ -346,7 +355,7 @@ while True: #everything is in a giant while loop so that the game can be reset a
         if (time > 6 and event == 0) or (random.randint(1, 40) == 1 and event == 1):
             print()
             stats = list([health, inventory, armor, mana])
-            stats = combat(stats, damagemin, damagemax, weapon, "Wolf", "Field", magic, "Wolf")
+            stats = combat(stats, damagemin, damagemax, weapon, "Wolf", "Field", magic, WolfName)
             health = stats[0]
             inventory = stats[1]
             armor = stats[2]
