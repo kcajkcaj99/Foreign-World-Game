@@ -94,7 +94,7 @@ def combat(cstats, cdamagemin, cdamagemax, cweapon, etype, elocation, cmagic, et
         earmor = 1
         eweaponname = "Bite"
         earmorname = "Fur"
-        einventory = list([("The coat of a "+str.lower(etitle)+".")])
+        einventory = list([("Wolf Corpse")])
         eai = "Aggressive"
 
     # This code writes a description based on the location and enemy type.
@@ -789,11 +789,15 @@ while True: #everything is in a giant while loop so that the game can be reset a
         if health <= 0:
             print ("Your health is below 0! You die!")
             break
+        if hunger > 0:
+            starving = 0
         if hunger <= 0 and starving == 0:
             print ("You are starving! You need to eat something quick!")
             hunger = 1
+            starving = 1
         if hunger <= 0 and (not starving == 0):
             print ("You died of hunger!")
+            break
     exitinput = input("You died! You lasted for "+str(int(4*time))+" hours. Press enter to play again, or type \"quit\" to quit.")
     if exitinput.lower() == "quit":
         break
