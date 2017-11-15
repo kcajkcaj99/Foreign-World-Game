@@ -133,10 +133,13 @@ def combat(cstats, cdamagemin, cdamagemax, cweapon, etype, elocation, cmagic, et
         '''
         # This code runs if you try to run
         if caction == "2":
-            if eai == "Aggressive":
-                print("You run, but the "+str.lower(etype)+" chases you.")
+            if eai == "Aggressive" and random.randint(1,2) == 1:
+                print("You run, but "+str.lower(etitle)+" chases you.")
+            elif eai == "Aggressive":
+                print ("You run, and get away.")
+                break
             elif eai == "Defensive":
-                print ("You run, and the "+str.lower(etype)+" does not give chase.")
+                print ("You run, and "+str.lower(etitle)+" does not give chase.")
                 break
 
         # This code runs if you attack.
@@ -145,10 +148,10 @@ def combat(cstats, cdamagemin, cdamagemax, cweapon, etype, elocation, cmagic, et
             damage = random.randint(cdamagemin, cdamagemax)
             ehit = 1
             if damage > earmor:
-                print ("Your attack hits the "+str.lower(etype)+", dealing "+str(damage)+" damage!")
+                print ("Your attack hits "+str.lower(etitle)+", dealing "+str(damage)+" damage!")
                 ehealth -= damage
             else:
-                print ("Your attack bounces off the "+str.lower(etype)+"'s "+str.lower(earmorname)+".")
+                print ("Your attack bounces off "+str.lower(etitle)+"'s "+str.lower(earmorname)+".")
                 earmor -= 1
 
         # This code runs if you try to cast a spell.
@@ -158,7 +161,7 @@ def combat(cstats, cdamagemin, cdamagemax, cweapon, etype, elocation, cmagic, et
             # This handles the various spells in the game
             if cspell == "laedote" and cmana >= 10:
                 damage = random.randint(3, 9)
-                print("You fire a bolt of magic towards the "+str.lower(etype)+", dealing "+str(damage)+" damage.")
+                print("You fire a bolt of magic towards "+str.lower(etitle)+", dealing "+str(damage)+" damage.")
                 ehealth -= damage
                 ehit = 1
                 burnout += random.randint(1, 2)
@@ -171,7 +174,7 @@ def combat(cstats, cdamagemin, cdamagemax, cweapon, etype, elocation, cmagic, et
                 burnout += random.randint(1, 2)
                 cmana -= 20
             elif cspell == "medeortibi" and cmana >= 20:
-                print ("A wave of healing passes over the "+str.lower(etype)+", causing it to regain 3 hitpoints.")
+                print ("A wave of healing passes over "+str.lower(etitle)+", causing it to regain 3 hitpoints.")
                 ehealth += 3
                 if ehealth > ehealthmax:
                     ehealth = ehealthmax
@@ -191,7 +194,7 @@ def combat(cstats, cdamagemin, cdamagemax, cweapon, etype, elocation, cmagic, et
 
         # This code lets you wait for an enemy response.
         else:
-            print ("You wait for the "+str.lower(etype)+" to react.")
+            print ("You wait for "+str.lower(etitle)+" to react.")
 
         if caction != 4:
             burnout -= 1
@@ -204,7 +207,7 @@ def combat(cstats, cdamagemin, cdamagemax, cweapon, etype, elocation, cmagic, et
         # This code determines the enemy reaction.
         if ehealth > 0:
             if eai == "Aggressive":
-                print ("The "+str.lower(etype)+" attacks you with its "+str.lower(eweaponname)+".")
+                print (etitle+" attacks you with its "+str.lower(eweaponname)+".")
                 damage = random.randint(eatkmin, eatkmax)
                 if damage > carmor:
                     print ("The attack hits you, dealing "+str(damage)+" damage!")
@@ -214,9 +217,9 @@ def combat(cstats, cdamagemin, cdamagemax, cweapon, etype, elocation, cmagic, et
                     carmor -= 1
             elif eai == "Defensive":
                 if ehit == 0:
-                    print ("The "+str.lower(etype)+" waits to see what you do next.")
+                    print (etitle+" waits to see what you do next.")
                 else:
-                    print ("The "+str.lower(etype)+" attacks you with its "+str.lower(eweaponname)+".")
+                    print (etitle+" attacks you with its "+str.lower(eweaponname)+".")
                     damage = random.randint(2, 10)
                     if damage > carmor:
                         print ("The attack hits you, dealing "+str(damage)+" damage!")
@@ -232,7 +235,7 @@ def combat(cstats, cdamagemin, cdamagemax, cweapon, etype, elocation, cmagic, et
             print ("You have "+str(int(cmana))+" mana remaining.")
         print()
         if ehealth <= 0:
-            print ("You slay the "+str.lower(etype+"!"))
+            print ("You slay "+str.lower(etitle)+"!")
             print ("You get "+str(einventory)+"!")
             cinventory += einventory
             print ()
