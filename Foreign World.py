@@ -560,7 +560,7 @@ while True: #everything is in a giant while loop so that the game can be reset a
             if inventory.count(FlaxFabricName) >= 7:
                 cancraft += ("    fc: Weave fabric out of "+str.lower(FlaxClothesName)+".\n")
             if "Wolf Corpse" in inventory:
-                cancraft += ("    sw: Skin the wolf corpse.\n")
+                cancraft += ("    sw: Skin the corpse of "+str.lower(WolfName)+".\n")
             if "Wolf hide" in inventory:
                 cancraft += ("    wc: Make a fur coat out of wolf hide.\n")
             if "Raw wolf meat" in inventory and fire == 1:
@@ -741,4 +741,3 @@ while True: #everything is in a giant while loop so that the game can be reset a
     exitinput = input("You died! You lasted for "+str(int(4*time))+" hours. Press enter to play again, or type \"quit\" to quit.")
     if exitinput.lower() == "quit":
         break
->>>>>>> 49b0138cdba25c0af0d90844cd9b7ecec452351d
