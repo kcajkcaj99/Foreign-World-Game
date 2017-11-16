@@ -308,6 +308,7 @@ while True: #everything is in a giant while loop so that the game can be reset a
     sleeptime = 0
     warm = 0
     furnace = 0
+    timediff = 0
     time = 0
     inittime = 0
     weapon = "Fists"
@@ -335,12 +336,20 @@ while True: #everything is in a giant while loop so that the game can be reset a
 
     # This code runs the game
     while True:
-        timediff = time-inittime
+        inittime = time
         if health < 1:
             break
         # This code asks what you want to do
         print("So far, you have survived for " + str(4*time) + " hours.")
         print("Your health: " + str(health) + "/12")
+
+       # print(sleeptime)
+        if sleeptime>62:
+            print("You are extremely tired! You need to sleep very soon.")
+        elif sleeptime>48:
+            print("You are very tired.")
+        elif sleeptime>17:
+            print("You are pretty tired.")
         print("Your hunger level: " + str(hunger) + "/100 (higher is more full)")
         if fire == 1:
             print("Your fire should burn for " + str(firetime) + " more hours.")
@@ -367,7 +376,7 @@ while True: #everything is in a giant while loop so that the game can be reset a
 
                 break
             event = 1
-        inittime = time
+
 
         print ("What do you want to do?")
         print ("    i: Inspect your Inventory")
@@ -387,32 +396,37 @@ while True: #everything is in a giant while loop so that the game can be reset a
         if action == "e":
             foodnames = [BasicFruitName, SecondaryFruitName, TertiaryFruitName, PoisonBerryName, BasicBerryName, FlaxSeedName]
             # This code asks what you want to eat
+            caneat = ""
             print ("What do you want to eat?")
             if BasicFruitName in inventory:
-                print ("    1: "+BasicFruitName)
+                caneat += ("    1: "+BasicFruitName + "\n")
             if SecondaryFruitName in inventory:
-                print ("    2: "+SecondaryFruitName)
+                caneat += ("    2: "+SecondaryFruitName + "\n")
             if TertiaryFruitName in inventory:
-                print ("    3: "+TertiaryFruitName)
+                caneat += ("    3: "+TertiaryFruitName + "\n")
             if PoisonBerryName in inventory:
-                print ("    4: "+PoisonBerryName)
+                caneat += ("    4: "+PoisonBerryName + "\n")
             if BasicBerryName in inventory:
-                print ("    5: "+BasicBerryName)
+                caneat += ("    5: "+BasicBerryName + "\n")
             if FlaxSeedName in inventory:
-                print ("    6: "+FlaxSeedName)
+                caneat += ("    6: "+FlaxSeedName + "\n")
             if "Raw wolf meat" in inventory:
-                print ("    7: Raw wolf meat")
+                caneat += ("    7: Raw wolf meat" + "\n")
             if "Burnt wolf meat" in inventory:
-                print ("    8: Burnt wolf meat")
+                caneat += ("    8: Burnt wolf meat" + "\n")
             if "Cooked wolf meat" in inventory:
-                print ("    9: Cooked wolf meat")
+                caneat += ("    9: Cooked wolf meat" + "\n")
             if "Raw rabbit meat" in inventory:
-                print ("    10: Raw rabbit meat")
+                caneat += ("    10: Raw rabbit meat" + "\n")
             if "Cooked rabbit meat" in inventory:
-                print ("    11: Cooked rabbit meat")
+                caneat += ("    11: Cooked rabbit meat" + "\n")
             if "Burnt rabbit meat" in inventory:
-                print ("    12: Burnt rabbit meat")
-            action = input("")
+                caneat += ("    12: Burnt rabbit meat" + "\n")
+            if caneat == "":
+                print ("Sorry, you need to gather food to eat.")
+            else:
+                print("What do you want to eat?")
+                action = input(caneat)
             print()
             # This code runs the results of what you eat.
             if action == "1" and BasicFruitName in inventory:
@@ -559,7 +573,6 @@ while True: #everything is in a giant while loop so that the game can be reset a
                     inventory += [find]
                     print ("You have found "+str.lower(find)+"!")
                     count -= 1
-            sleeptime += 1
             time += 0.25
             hunger -= 10
         #This code executes processing raw materials
@@ -573,10 +586,10 @@ while True: #everything is in a giant while loop so that the game can be reset a
         # This code executes resting
         elif action == "r":
             print ("You rest for a while, and are now well rested.")
-            hunger -= int(3*sleeptime)
-            time += 1+(sleeptime/2)
+            time += 2.5
             sleeptime = 0
             hunger -= 3
+            timediff = 0
 
         # This code executes crafting
         elif action == "c":
@@ -625,7 +638,6 @@ while True: #everything is in a giant while loop so that the game can be reset a
                         print ("You have extracted " + str.lower(FlaxFibreName) + ".")
                         count -= 1
                     inventory.remove(FlaxName)
-                    sleeptime += 0.5
                     time += 1
                     hunger -= 3
                 # This code makes flaxen twine
@@ -633,7 +645,6 @@ while True: #everything is in a giant while loop so that the game can be reset a
                     inventory.remove(FlaxFibreName)
                     inventory += [FlaxTwineName]
                     print ("You spin "+FlaxTwineName+".")
-                    sleeptime += 0.1
                     time += 0.1
                 # This code makes flaxen fabric
                 elif action == "ft" and inventory.count(FlaxTwineName) > 3:
@@ -643,7 +654,6 @@ while True: #everything is in a giant while loop so that the game can be reset a
                     inventory.remove(FlaxTwineName)
                     inventory += [FlaxFabricName]
                     print ("You weave "+str.lower(FlaxFabricName)+".")
-                    sleeptime += 0.5
                     time += 0.5
                     hunger -= 2
                 # This code makes flaxen clothes
@@ -654,11 +664,9 @@ while True: #everything is in a giant while loop so that the game can be reset a
                         recurrence -= 1
                     inventory += [FlaxClothesName]
                     print ("You make "+str.lower(FlaxClothesName)+".")
-                    sleeptime += 0.75
                     time +=0.75
                     hunger -= 3
                 elif action == "sw" and "Wolf Corpse" in inventory:
-                    sleeptime += 0.75
                     time += 0.75
                     hunger -= 3
                     inventory.remove("Wolf Corpse")
@@ -667,7 +675,6 @@ while True: #everything is in a giant while loop so that the game can be reset a
                 elif action == "wc" and "Wolf hide" in inventory:
                     print ("You make a fur coat from the wolf hide.")
                     inventory.remove("Wolf hide")
-                    sleeptime += 0.75
                     time += 0.75
                     hunger -= 3
                     inventory += ["A fur coat"]
@@ -679,7 +686,6 @@ while True: #everything is in a giant while loop so that the game can be reset a
                     else:
                         print("You carefully cook the wolf meat. It looks delicious.")
                         inventory += ["Cooked wolf meat"]
-                    sleeptime += 0.75
                     time += 0.75
                     hunger -= 3
                 elif action == "cf"and (inventory.count(BasicTwigName)) > 3 and (inventory.count(BasicBranchName)) > 1:
@@ -699,9 +705,7 @@ while True: #everything is in a giant while loop so that the game can be reset a
                     fire = 1
                     if furnace < 1:
                         furnace = 1
-                    # This code manages the time and hunger incurred by building the campfire.
-                    sleeptime += 1
-                    time += 1
+                    # This code manages the time and hunger incurred by building the campfire.                    time += 1
                     hunger -= 5
                     warm = 1
                     firetime = 24
@@ -709,7 +713,6 @@ while True: #everything is in a giant while loop so that the game can be reset a
                     print("You make " + str.lower(RabbitsClubName) + ". Now you can hunt rabbits!")
                     inventory.remove(BasicBranchName)
                     inventory += [RabbitsClubName]
-                    sleeptime += 1
                     time += 1
                     hunger -= 5
                 elif action == "sr" and "Rabbit corpse" in inventory:
@@ -717,10 +720,9 @@ while True: #everything is in a giant while loop so that the game can be reset a
                     print ("You skin the rabbit's corpse. Now, you have a rabbit hide, a rabbit's foot, and raw rabbit meat.")
                     inventory.remove("Rabbit corpse")
                     inventory += ["Rabbit hide", "Rabbit foot", "Raw rabbit meat"]
-                    sleeptime += 1
                     time += 1
                     hunger -= 5
-                elif action == "cr" and "Raw rabbit meat" in inventory:
+                elif action == "cr" and "Raw rabbit meat" in inventory and fire == 1:
                     inventory.remove("Raw rabbit meat")
                     if random.randint(1, 3) == 1:
                         print("You burn the rabbit meat to a crisp.")
@@ -728,7 +730,6 @@ while True: #everything is in a giant while loop so that the game can be reset a
                     else:
                         print("You carefully cook the rabbit meat. It looks delicious.")
                         inventory += ["Cooked rabbit meat"]
-                    sleeptime += 0.75
                     time += 0.75
                     hunger -= 3
                 elif action == "gl" and "Rabbit foot" in inventory and FlaxTwineName in inventory:
@@ -741,7 +742,7 @@ while True: #everything is in a giant while loop so that the game can be reset a
             #This code facilitates hunting.
             canhunt = ""
             if RabbitsClubName in inventory:
-                canhunt += "r: Hunt rabbits"
+                canhunt += "r: Hunt rabbits\n"
             if canhunt == "":
                 print("Sorry, you need to craft a weapon in order to hunt.")
             else:
@@ -792,7 +793,11 @@ while True: #everything is in a giant while loop so that the game can be reset a
                   "A good way to start is to gather enough twigs and branches to start a fire."
                   "Have fun!\n")
         print()
+        timediff = time-inittime
         firetime -= timediff*4
+        sleeptime += timediff*4
+        if sleeptime>240: #the world record for longest time without sleep is 11 days
+            print("You haven't slept for 10 days! You die from sleep depravation.")
         if firetime <= 0 and fire == 1:
             print("Your fire died out! Remember to feed it with twigs and branches.")
             fire = 0
@@ -810,6 +815,7 @@ while True: #everything is in a giant while loop so that the game can be reset a
         if hunger <= 0 and (not starving == 0):
             print ("You died of hunger!")
             break
+
     exitinput = input("You died! You lasted for "+str(int(4*time))+" hours. Press enter to play again, or type \"quit\" to quit.")
     if exitinput.lower() == "quit":
         break
