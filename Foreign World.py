@@ -26,6 +26,15 @@ def formstring (listz):
         count += 1
     return word
 
+def replacelist (list, startingvalue, endingvalue):
+    toReturn = []
+    for x in list:
+        if x == startingvalue:
+            toReturn += [endingvalue]
+        else:
+            toReturn += [x]
+    return toReturn
+
 # The following code defines how combat works
 def combat(cstats, cdamagemin, cdamagemax, cweapon, etype, elocation, cmagic, etitle):
     # The following code defines how to remove punctuation
@@ -94,7 +103,7 @@ def combat(cstats, cdamagemin, cdamagemax, cweapon, etype, elocation, cmagic, et
         earmor = 1
         eweaponname = "Bite"
         earmorname = "Fur"
-        einventory = list([("Wolf Corpse")])
+        einventory = list([(WolfCorpseName)])
         eai = "Aggressive"
 
     # This code writes a description based on the location and enemy type.
@@ -285,15 +294,24 @@ while True: #everything is in a giant while loop so that the game can be reset a
 
     # The following code sets Wolf related names
     WolfFurColor = randchoice(["Grey", "White", "Black", "Brown"])
-    WolfName = "A fanged, bipedal "+str.lower(WolfFurColor)+"-furred animal"
-    WolfFurName = "A piece of "+str.lower(WolfFurColor)+" fur"
-    WolfFangName = "A "+randchoice(["curved", "long", "serrated"])+" fang"
-    WolfCorpseName = "The corpse of "+str.lower(WolfName)
-    WolfMeatName = "The uncooked meat of "+str.lower(WolfName)
+    WolfName = "A " + str.lower(WolfFurColor)+" wolf"
+    RawWolfMeatName = "Raw wolf meat"
+    CookedWolfMeatName = "Cooked wolf meat"
+    BurntWolfMeatName = "Burnt wolf meat"
+    WolfCorpseName = "Wolf corpse"
+    WolfHideName = "A " + str.lower(WolfFurColor) + " wolf hide"
+#    WolfFurName = "A piece of "+str.lower(WolfFurColor)+" fur"
+#    WolfFangName = "A "+randchoice(["curved", "long", "serrated"])+" fang"
+#    WolfCorpseName = "The corpse of "+str.lower(WolfName)
+#    WolfMeatName = "The uncooked meat of "+str.lower(WolfName)
 
-
+    #The following code sets mushroom names.
+    BasicShroomName = "A " + randchoice(["red", "spotted", "purple", "brown", "white"]) + " mushroom"
+    TrippyShroomName = BasicShroomName
+    while TrippyShroomName == BasicShroomName:
+        TrippyShroomName = "A " + randchoice(["red", "spotted", "purple", "brown", "white"]) + " mushroom"
     # The following code sets wood names.
-    BasicWoodName = "A "+randchoice(list(["dark", "light", "red", "pale"]))+" wood"
+    BasicWoodName = "A "+ randchoice((["dark", "light", "red", "pale"]))+" wood"
     BasicTwigName = "A twig made of "+str.lower(BasicWoodName)
     BasicBranchName = "A branch made of "+str.lower(BasicWoodName)
     RabbitsClubName = "A rabbit's club made of " + str.lower(BasicWoodName)
@@ -311,12 +329,14 @@ while True: #everything is in a giant while loop so that the game can be reset a
     timediff = 0
     time = 0
     inittime = 0
+    tripping = False
     weapon = "Fists"
     damagemin = 1
     damagemax = 4
     event = 0
-    fire = 0
     luck = 0
+
+    fire = 0
     firetime = -1 #If the player makes a campfire, this is the # of hours since the fire has been started. It dies down after 24 hours of not being fed. The player can feed it with twigs and branches.
     starving = 0
     # The following code forms your stats from its parts
@@ -410,18 +430,22 @@ while True: #everything is in a giant while loop so that the game can be reset a
                 caneat += ("    5: "+BasicBerryName + "\n")
             if FlaxSeedName in inventory:
                 caneat += ("    6: "+FlaxSeedName + "\n")
-            if "Raw wolf meat" in inventory:
-                caneat += ("    7: Raw wolf meat" + "\n")
-            if "Burnt wolf meat" in inventory:
-                caneat += ("    8: Burnt wolf meat" + "\n")
-            if "Cooked wolf meat" in inventory:
-                caneat += ("    9: Cooked wolf meat" + "\n")
+            if RawWolfMeatName in inventory:
+                caneat += ("    7: " + RawWolfMeatName + "\n")
+            if BurntWolfMeatName in inventory:
+                caneat += ("    8: " + BurntWolfMeatName + "\n")
+            if CookedWolfMeatName in inventory:
+                caneat += ("    9: " + CookedWolfMeatName + "\n")
             if "Raw rabbit meat" in inventory:
                 caneat += ("    10: Raw rabbit meat" + "\n")
             if "Cooked rabbit meat" in inventory:
                 caneat += ("    11: Cooked rabbit meat" + "\n")
             if "Burnt rabbit meat" in inventory:
                 caneat += ("    12: Burnt rabbit meat" + "\n")
+            if BasicShroomName in inventory:
+                caneat += ("    13: " + BasicShroomName + "\n")
+            if TrippyShroomName in inventory:
+                caneat += ("    14: " + TrippyShroomName + "\n")
             if caneat == "":
                 print ("Sorry, you need to gather food to eat.")
             else:
@@ -458,23 +482,23 @@ while True: #everything is in a giant while loop so that the game can be reset a
                 inventory.remove(FlaxSeedName)
                 hunger += 2
                 health += 0.25
-            if action == "7" and "Raw wolf meat" in inventory:
-                inventory.remove("Raw wolf meat")
+            if action == "7" and RawWolfMeatName in inventory:
+                inventory.remove(RawWolfMeatName)
                 if random.randint(0, 1) == 0: #Sometimes it should make you sick, sometimes it shouldn't.
-                    print("You eat the raw wolf meat.")
+                    print("You eat the " + RawWolfMeatName)
                     hunger += 15
                     health += 1
                 else:
-                    print("You eat the raw wolf meat. It makes you feel sick.")
+                    print("You eat the " + RawWolfMeatName + "It makes you feel sick.")
                     health -= random.randint(2, 4)
-            if action == "8" and "Burnt wolf meat" in inventory:
-                print ("You eat the burnt wolf meat. It tastes disgusting.")
-                inventory.remove("Burnt wolf meat")
+            if action == "8" and BurntWolfMeatName in inventory:
+                print ("You eat the " + BurntWolfMeatName + "It tastes disgusting.")
+                inventory.remove(BurntWolfMeatName)
                 hunger += 10
                 health += 1
-            if action == "9" and "Cooked wolf meat" in inventory:
-                print ("You eat the cooked wolf meat.")
-                inventory.remove("Cooked wolf meat")
+            if action == "9" and CookedWolfMeatName in inventory:
+                print ("You eat the " + CookedWolfMeatName)
+                inventory.remove(CookedWolfMeatName)
                 hunger += 30
                 health += 5
             if action == "10" and "Raw rabbit meat" in inventory:
@@ -495,7 +519,26 @@ while True: #everything is in a giant while loop so that the game can be reset a
                 print ("You eat the burnt rabbit meat. It tastes disgusting.")
                 inventory.remove("Burnt rabbit meat")
                 hunger += 7
-
+            if action == "13" and BasicShroomName in inventory:
+                print ("You eat the mushroom.\n")
+                inventory.remove(BasicShroomName)
+                hunger += 5
+            if action == "14" and TrippyShroomName in inventory:
+                print ("You eat the mushroom. It makes you see pretty colors.\n")
+                inventory.remove(TrippyShroomName)
+                hunger += 5
+                if random.randint(1, 2) == 1:
+                    WolfName = "A unicorn"
+                    WolfCorpseName = "Unicorn corpse"
+                    CookedWolfMeatName = "Cooked unicorn meat"
+                    RawWolfMeatName = "Raw unicorn meat"
+                    BurntWolfMeatName = "Burnt unicorn meat"
+                else:
+                    WolfName = "A dragon"
+                    WolfCorpseName = "Dragon corpse"
+                    CookedWolfMeatName = "Cooked dragon meat"
+                    RawWolfMeatName = "Raw dragon meat"
+                    BurntWolfMeatName = "Burnt dragon meat"
             #These next lines make sure that you don't have more than 100 hunger and 12 health.
             if hunger > 100:
                 hunger = 100
@@ -549,6 +592,7 @@ while True: #everything is in a giant while loop so that the game can be reset a
             print ("What do you want to search for?")
             print ("    b: Berries")
             print ("    f: Flowers")
+            print ("    s: Mushrooms")
             print ("    t: Twigs and Branches")
             action = input ("")
             print ("You have spent some time searching.")
@@ -565,6 +609,13 @@ while True: #everything is in a giant while loop so that the game can be reset a
                     find = randchoice(list([FlaxName, FlaxName, FlaxName]))
                     inventory += [find]
                     print ("You have found "+str.lower(find)+"!")
+                    count -= 1
+            elif str.lower(action) == "s":
+                count = random.randint(2, 4)
+                while count > 0:
+                    find = randchoice(list([BasicShroomName, BasicShroomName, BasicShroomName, BasicShroomName, TrippyShroomName])) #Trippy shrooms replace the word "dragon" with the word "wolf" for a few hours and summon one.
+                    inventory += [find]
+                    print ("You have found " + str.lower(find) + "!")
                     count -= 1
             elif str.lower(action) == "t":
                 count = random.randint(1, 3)
@@ -590,6 +641,18 @@ while True: #everything is in a giant while loop so that the game can be reset a
             sleeptime = 0
             hunger -= 3
             timediff = 0
+            inventory = replacelist(inventory, RawWolfMeatName, "Raw wolf meat")
+            inventory = replacelist(inventory, CookedWolfMeatName, "Cooked wolf meat")
+            inventory = replacelist(inventory, BurntWolfMeatName, "Burnt wolf meat")
+            inventory = replacelist(inventory, WolfHideName, "A " + str.lower(WolfFurColor) + " wolf hide")
+            inventory = replacelist(inventory, WolfCorpseName, "Wolf corpse")
+            WolfName = "A " + str.lower(WolfFurColor) + " wolf"
+            RawWolfMeatName = "Raw wolf meat"
+            CookedWolfMeatName = "Cooked wolf meat"
+            BurntWolfMeatName = "Burnt wolf meat"
+            WolfCorpseName = "Wolf corpse"
+            WolfHideName = "A " + str.lower(WolfFurColor) + " wolf hide"
+
 
         # This code executes crafting
         elif action == "c":
@@ -603,8 +666,8 @@ while True: #everything is in a giant while loop so that the game can be reset a
                 cancraft += ("    ft: Weave fabric out of "+str.lower(FlaxTwineName)+".\n")
             if inventory.count(FlaxFabricName) >= 7:
                 cancraft += ("    fc: Weave fabric out of "+str.lower(FlaxClothesName)+".\n")
-            if "Wolf Corpse" in inventory:
-                cancraft += ("    sw: Skin the wolf corpse.\n")
+            if WolfCorpseName in inventory:
+                cancraft += ("    sw: Skin the "+ str.lower(WolfCorpseName) + "\n")
             if "Wolf hide" in inventory:
                 cancraft += ("    wc: Make a fur coat out of wolf hide.\n")
             if "Raw wolf meat" in inventory and fire == 1:
@@ -666,26 +729,26 @@ while True: #everything is in a giant while loop so that the game can be reset a
                     print ("You make "+str.lower(FlaxClothesName)+".")
                     time +=0.75
                     hunger -= 3
-                elif action == "sw" and "Wolf Corpse" in inventory:
+                elif action == "sw" and WolfCorpseName in inventory:
                     time += 0.75
                     hunger -= 3
-                    inventory.remove("Wolf Corpse")
-                    inventory += ["Wolf hide", "Raw wolf meat"]
-                    print ("You skin the wolf. Now, you have a wolf hide and raw wolf meat.")
-                elif action == "wc" and "Wolf hide" in inventory:
-                    print ("You make a fur coat from the wolf hide.")
-                    inventory.remove("Wolf hide")
+                    inventory.remove(WolfCorpseName)
+                    inventory += [WolfHideName, RawWolfMeatName]
+                    print ("You skin the animal.")
+                elif action == "wc" and WolfHideName in inventory:
+                    print ("You make a fur coat from the animal hide.")
+                    inventory.remove(WolfHideName)
                     time += 0.75
                     hunger -= 3
                     inventory += ["A fur coat"]
                 elif action == "cw" and "Raw wolf meat" in inventory:
                     inventory.remove("Raw wolf meat")
                     if random.randint(1, 3) == 1:
-                        print("You burn the wolf meat to a crisp.")
-                        inventory += ["Burnt wolf meat"]
+                        print("You burn the meat to a crisp.")
+                        inventory += [BurntWolfMeatName]
                     else:
-                        print("You carefully cook the wolf meat. It looks delicious.")
-                        inventory += ["Cooked wolf meat"]
+                        print("You carefully cook the meat. It looks delicious.")
+                        inventory += [BurntWolfMeatName]
                     time += 0.75
                     hunger -= 3
                 elif action == "cf"and (inventory.count(BasicTwigName)) > 3 and (inventory.count(BasicBranchName)) > 1:
@@ -796,8 +859,10 @@ while True: #everything is in a giant while loop so that the game can be reset a
         timediff = time-inittime
         firetime -= timediff*4
         sleeptime += timediff*4
-        if sleeptime>240: #the world record for longest time without sleep is 11 days
-            print("You haven't slept for 10 days! You die from sleep depravation.")
+        if sleeptime>120: #After 5 days without sleeping you start to hallucinate
+            print("You haven't slept for 5 days! You start to see vivid colors.")
+            tripping = True
+            triptime = sys.maxsize #You should only stop hallucinating if you go to sleep
         if firetime <= 0 and fire == 1:
             print("Your fire died out! Remember to feed it with twigs and branches.")
             fire = 0
