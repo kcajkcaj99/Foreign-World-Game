@@ -258,6 +258,9 @@ def randchoice(listy):
     numy = random.randint(1, len(listy)) - 1
     return listy[numy]
 
+print("Welcome to...\n")
+title = open("title", 'r') #file with ASCII art I made
+print(title.read())
 while True: #everything is in a giant while loop so that the game can be reset afterward.
     # The following code sets fruit names.
 
